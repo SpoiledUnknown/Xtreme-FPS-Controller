@@ -1,4 +1,5 @@
 using Cinemachine;
+using System;
 using UnityEditor;
 using UnityEditor.PackageManager;
 using UnityEngine;
@@ -34,9 +35,8 @@ public class NDSEditor : EditorWindow
         GUILayout.Label("Xtreme FPS Controller Setup", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Bold, fontSize = 16 });
         GUI.color = Color.black;
         EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
-        EditorGUILayout.Space();
         GUILayout.Space(20); // Add some vertical spacing
-        GUILayout.Label("Automatic Checks.", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Bold, fontSize = 13 }, GUILayout.ExpandWidth(true));
+        GUILayout.Label("System Checks.", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Bold, fontSize = 13 }, GUILayout.ExpandWidth(true));
         GUI.color = Color.white;
         #endregion
         #region Cinemachine
@@ -83,9 +83,9 @@ public class NDSEditor : EditorWindow
             GUI.color = Color.red;
             GUILayout.Label(inputSystemStatusText, new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleLeft, fontStyle = FontStyle.Bold, fontSize = 13 }, GUILayout.ExpandWidth(true));
             GUI.color = Color.white;
-            Rect buttonRect = GUILayoutUtility.GetRect(200, 50); // Define button dimensions
-            buttonRect.x = (EditorGUIUtility.currentViewWidth - buttonRect.width) * 0.5f; // Center the button horizontally
-            if (GUI.Button(buttonRect, "Install InputSystem"))
+            Rect inputButtonRect = GUILayoutUtility.GetRect(200, 50); // Define button dimensions
+            inputButtonRect.x = (EditorGUIUtility.currentViewWidth - inputButtonRect.width) * 0.5f; // Center the button horizontally
+            if (GUI.Button(inputButtonRect, "Install InputSystem"))
             {
                 // Code to execute when the button is clicked
                 InstallCinemachine();
@@ -93,6 +93,27 @@ public class NDSEditor : EditorWindow
         }
         EditorGUILayout.Space();
         #endregion
+
+        #region Create Controller
+        GUI.color = Color.black;
+        EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+        GUILayout.Label("Tag Creation.", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Bold, fontSize = 13 }, GUILayout.ExpandWidth(true));
+        GUI.color = Color.white;
+        GUILayout.Space(20); // Add some vertical spacing
+        Rect ccButtonRect = GUILayoutUtility.GetRect(200, 50); // Define button dimensions
+        ccButtonRect.x = (EditorGUIUtility.currentViewWidth - ccButtonRect.width) * 0.5f; // Center the button horizontally
+        if (GUI.Button(ccButtonRect, "Create Tag"))
+        {
+            // Code to execute when the button is clicked
+            CreateTag();
+        }
+        EditorGUILayout.Space();
+        #endregion
+    }
+
+    private void CreateTag()
+    {
+        
     }
 
     bool IsCinemachineInstalled()

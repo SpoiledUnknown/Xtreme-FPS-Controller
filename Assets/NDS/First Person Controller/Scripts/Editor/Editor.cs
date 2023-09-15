@@ -87,6 +87,48 @@ public class NDSEditor : EditorWindow
             GUI.color = Color.black;
             EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
             GUILayout.Space(20); // Add some vertical spacing
+            #region Discord
+            GUI.color = Color.yellow;
+            GUILayout.Label("Socials:-", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleLeft, fontStyle = FontStyle.Bold, fontSize = 13 }, GUILayout.ExpandWidth(true));
+            GUI.color = Color.white;
+            Rect buttonRect = GUILayoutUtility.GetRect(200, 50); // Define button dimensions
+            if (GUI.Button(buttonRect, "Discord."))
+            {
+                // Code to execute when the button is clicked
+                Application.OpenURL("https://discord.gg/Zd93pzBAHS");
+            }
+            EditorGUILayout.Space();
+            #endregion
+            #region Github
+            GUI.color = Color.white;
+            Rect inputButtonRect = GUILayoutUtility.GetRect(200, 50); // Define button dimensions
+            if (GUI.Button(inputButtonRect, "Github."))
+            {
+                // Code to execute when the button is clicked
+                Application.OpenURL("https://github.com/SpoiledUnknown");
+            }
+            EditorGUILayout.Space();
+            #endregion
+            #region Youtube
+            GUI.color = Color.white;
+            Rect inputButton = GUILayoutUtility.GetRect(200, 50); // Define button dimensions
+            if (GUI.Button(inputButton, "Youtube."))
+            {
+                // Code to execute when the button is clicked
+                Application.OpenURL("https://www.youtube.com/c/SpoiledUnknown");
+            }
+            EditorGUILayout.Space();
+            #endregion
+            #region Github Repository
+            GUI.color = Color.white;
+            Rect inputButtonRepo = GUILayoutUtility.GetRect(200, 41.5f); // Define button dimensions
+            if (GUI.Button(inputButtonRepo, "Github Repository."))
+            {
+                // Code to execute when the button is clicked
+                Application.OpenURL("https://github.com/SpoiledUnknown/Xtreme-FPS-Controller");
+            }
+            EditorGUILayout.Space();
+            #endregion
             #endregion
         }
         if (systemButton)
@@ -95,9 +137,6 @@ public class NDSEditor : EditorWindow
             #region Cinemachine
             GUI.color = Color.yellow;
             GUILayout.Label("Cinemachine:-", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleLeft, fontStyle = FontStyle.Bold, fontSize = 13 }, GUILayout.ExpandWidth(true));
-            GUI.color = Color.white;
-            // Create a button that stays at the bottom
-            GUI.color = Color.red;
             GUI.color = Color.white;
             Rect buttonRect = GUILayoutUtility.GetRect(200, 50); // Define button dimensions
             if (GUI.Button(buttonRect, "Install Cinemachine."))
@@ -110,9 +149,6 @@ public class NDSEditor : EditorWindow
             #region Input System
             GUI.color = Color.yellow;
             GUILayout.Label("Input System:-", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleLeft, fontStyle = FontStyle.Bold, fontSize = 13 }, GUILayout.ExpandWidth(true));
-            GUI.color = Color.white;
-            // Create a button that stays at the bottom
-            GUI.color = Color.red;
             GUI.color = Color.white;
             Rect inputButtonRect = GUILayoutUtility.GetRect(200, 50); // Define button dimensions
             if (GUI.Button(inputButtonRect, "Install InputSystem."))
@@ -130,9 +166,6 @@ public class NDSEditor : EditorWindow
             GUI.color = Color.yellow;
             GUILayout.Label("Layers:-", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleLeft, fontStyle = FontStyle.Bold, fontSize = 13 }, GUILayout.ExpandWidth(true));
             GUI.color = Color.white;
-            // Create a button that stays at the bottom
-            GUI.color = Color.red;
-            GUI.color = Color.white;
             Rect buttonRect = GUILayoutUtility.GetRect(200, 50); // Define button dimensions
             if (GUI.Button(buttonRect, "Create Layers."))
             {
@@ -144,9 +177,6 @@ public class NDSEditor : EditorWindow
             #region Create Tags
             GUI.color = Color.yellow;
             GUILayout.Label("Tags:-", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleLeft, fontStyle = FontStyle.Bold, fontSize = 13 }, GUILayout.ExpandWidth(true));
-            GUI.color = Color.white;
-            // Create a button that stays at the bottom
-            GUI.color = Color.red;
             GUI.color = Color.white;
             Rect inputButtonRect = GUILayoutUtility.GetRect(200, 50); // Define button dimensions
             if (GUI.Button(inputButtonRect, "Create Tags."))
@@ -193,21 +223,5 @@ public class NDSEditor : EditorWindow
     }
     #endregion
 
-    // Helper method to check if an assembly is loaded
-    private static bool IsAssemblyLoaded(string assemblyName)
-    {
-        System.AppDomain currentDomain = System.AppDomain.CurrentDomain;
-        System.Reflection.Assembly[] assemblies = currentDomain.GetAssemblies();
-
-        foreach (System.Reflection.Assembly assembly in assemblies)
-        {
-            if (assembly.FullName.Contains(assemblyName))
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
 }
 

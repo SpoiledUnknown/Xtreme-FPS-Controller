@@ -9,10 +9,6 @@ TagManager:
   - gravel
   - water
   - metal
-  - vaultObject
-  - Door
-  - hud
-  - hitCollider
   layers:
   - Default
   - TransparentFX
@@ -20,32 +16,32 @@ TagManager:
   - Physics
   - Water
   - UI
-  - player
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
   - Ground
-  - Enemy
-  - MovingPlatform
-  - VisualEffect
-  - Overlay
-  - SubCharacter
-  - Character
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
   m_SortingLayers:
   - name: Default
     uniqueID: 0

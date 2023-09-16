@@ -63,7 +63,6 @@ public class WeaponSystemEditor : Editor
 
         GUI.color = Color.white;
         ws.isGunAuto = EditorGUILayout.ToggleLeft(new GUIContent("Is Gun Auto", "Determines if the gun is automatic or tap-tap."), ws.isGunAuto);
-        ws.isAimHold = EditorGUILayout.ToggleLeft(new GUIContent("Is Aim Hold", "Determines if the player has to hold aim key or press/tap."), ws.isAimHold);
         ws.timeBetweenEachShots = EditorGUILayout.Slider(new GUIContent("Time Between Each Shots", "Determines the time after which each shots will be fired."), ws.timeBetweenEachShots, 0f, 1f);
         ws.timeBetweenShooting = EditorGUILayout.Slider(new GUIContent("Time Between Shooting", "Determines the time it will take for weapon to load new bullets."), ws.timeBetweenShooting, 0f, 1f);
         ws.Spread = EditorGUILayout.Slider(new GUIContent("Bullet Spread", "Determines the bullet spread."), ws.Spread, 0f, 1f);
@@ -81,6 +80,20 @@ public class WeaponSystemEditor : Editor
         {
             ws.reloadRotationSpeed = EditorGUILayout.Slider(new GUIContent("Animation Speed", "Determines the speed at which the animation will play."), ws.reloadRotationSpeed, 0f, 1000f);
         }
+        EditorGUILayout.Space();
+
+        GUI.color = Color.black;
+        EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+        GUILayout.Label("ADS Settings", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Bold, fontSize = 13 }, GUILayout.ExpandWidth(true));
+        EditorGUILayout.Space();
+        GUI.color = Color.white;
+        ws.canAim = EditorGUILayout.ToggleLeft(new GUIContent("ADS", "Determines if the weapon should aim or not."), ws.canAim);
+        GUI.enabled = ws.canAim;
+        ws.isAimHold = EditorGUILayout.ToggleLeft(new GUIContent("Is Aim Hold", "Determines if the player has to hold aim key or press/tap."), ws.isAimHold);
+        ws.weaponHolder = (Transform)EditorGUILayout.ObjectField(new GUIContent("Weapon Holder", "Reference to the Weapon Holder gameobject (can be anything but must be child of camera and parent of all object needed for weapon system to work)."), ws.weaponHolder, typeof(Transform), true);
+        ws.aimingLocalPosition = EditorGUILayout.Vector3Field(new GUIContent("Aim Position", "Determines the position which the gun will saty at while aiming."), ws.aimingLocalPosition);
+        ws.aimSmoothing = EditorGUILayout.Slider(new GUIContent("Aim Speed", "Determines the speed at which the gun will reach aim state."), ws.aimSmoothing, 5f, 100f);
+        GUI.enabled = true;
         EditorGUILayout.Space();
 
         GUI.color = Color.black;

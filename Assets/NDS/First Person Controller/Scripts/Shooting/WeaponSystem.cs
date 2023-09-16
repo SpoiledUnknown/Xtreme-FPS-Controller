@@ -48,6 +48,14 @@ namespace NDS.UniversalWeaponSystem
         private bool shooting;
         private Quaternion originalReloadRotation;
 
+        //Aiming
+        public bool canAim;
+        public Transform weaponHolder;
+        public Vector3 aimingLocalPosition;
+        public float aimSmoothing = 10;
+
+        private Vector3 normalLocalPosition;
+
         //Camera Recoil 
         public bool haveCameraRecoil;
         public Transform cameraRecoilHolder;
@@ -148,10 +156,12 @@ namespace NDS.UniversalWeaponSystem
             rotationSwayOriginalRotation = rotationSwayTransform.localRotation;
             lastPosition = transform.position;
             originalReloadRotation = gunPositionHolder.localRotation;
+            normalLocalPosition = weaponHolder.transform.localPosition;
         }
         private void Update()
         {
             MyInput();
+            DetermineAim();
             HandleWeaponSway();
             HandleTilt();
             HandleCameraRotation();
@@ -184,6 +194,17 @@ namespace NDS.UniversalWeaponSystem
                 bulletsShot = bulletsPerTap;
                 Shoot();
             }
+        }
+
+        private void DetermineAim()
+        {
+            if (!canAim) return;
+            Vector3 target = normalLocalPosition;
+            if (aiming) target = aimingLocalPosition;
+
+            Vector3 desiredPosition = Vector3.Lerp(weaponHolder.transform.localPosition, target, Time.deltaTime * aimSmoothing);
+
+            weaponHolder.transform.localPosition = desiredPosition;
         }
 
         private void Shoot()
@@ -232,7 +253,7 @@ namespace NDS.UniversalWeaponSystem
         }
         private void HandleReloadAnimation()
         {
-            if (!haveProceduralReload) return;
+            if (!haveProceduralReload || aiming) return;
             if (reloading)
             {
                 // Rotate the object continuously
@@ -345,7 +366,7 @@ namespace NDS.UniversalWeaponSystem
         }
         private void JumpSwayEffect()
         {
-            if(!haveJumpSway) return;
+            if(!haveJumpSway || aiming) return;
 
             if (!fpsController.isGrounded)
             {

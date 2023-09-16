@@ -6,6 +6,9 @@ using UnityEditor;
 using NDS.InputManager;
 using NDS.Touchscreen.DragInput;
 using UnityEngine;
+using Cinemachine;
+using UnityEditor.PackageManager;
+using System.ComponentModel;
 
 [CustomEditor(typeof(FPSInputManager)), CanEditMultipleObjects]
 public class FPSInputManagerEditor : Editor
@@ -32,6 +35,7 @@ public class FPSInputManagerEditor : Editor
         EditorGUILayout.Space();
         GUI.color = Color.black;
         EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+        
         #endregion
         #region Mobile Controls
         //Mobile Controls settings

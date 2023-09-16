@@ -28,11 +28,6 @@ public class FirstPersonControllerEditor : Editor
         EditorGUILayout.Space();
         GUI.color = Color.black;
         GUILayout.Label("Xtreme FPS Controller", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Bold, fontSize = 16 });
-        GUI.color = Color.green;
-        GUILayout.Label("NDS || By SpoiledUnknown", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Normal, fontSize = 12 });
-        GUI.color = Color.red;
-        GUILayout.Label("version 1.0.0", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Italic, fontSize = 12 });
-        GUI.color = Color.black;
         EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
         GUI.color = Color.green;
         GUILayout.Label("Player Controller Script", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Bold, fontSize = 16 });

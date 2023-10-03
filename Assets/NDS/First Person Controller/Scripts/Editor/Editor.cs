@@ -1,5 +1,6 @@
 using UnityEditor;
 using UnityEditor.PackageManager;
+using UnityEditorInternal;
 using UnityEngine;
 
 public class NDSEditor : EditorWindow
@@ -23,7 +24,14 @@ public class NDSEditor : EditorWindow
     private bool layerButton = false;
     private bool completeButton = false;
 
-    
+    private string groundLayer = "Ground";
+    private string physicsLayer = "Physics";
+
+    private string concreteTag = "Concrete";
+    private string grassTag = "Grass";
+    private string gravelTag = "Gravel";
+    private string waterTag = "Water";
+    private string metalTag = "Metals";
     #endregion
     private void OnGUI()
     {
@@ -169,8 +177,9 @@ public class NDSEditor : EditorWindow
             Rect buttonRect = GUILayoutUtility.GetRect(200, 50); // Define button dimensions
             if (GUI.Button(buttonRect, "Create Layers."))
             {
-                // Code to execute when the button is clicked
-                
+                // Create the new layer.
+                CreateLayer(groundLayer);
+                CreateLayer(physicsLayer);
             }
             EditorGUILayout.Space();
             #endregion
@@ -182,7 +191,37 @@ public class NDSEditor : EditorWindow
             if (GUI.Button(inputButtonRect, "Create Tags."))
             {
                 // Code to execute when the button is clicked
-                
+                CreateTag(concreteTag);
+                CreateTag(grassTag);
+                CreateTag(gravelTag);
+                CreateTag(waterTag);
+                CreateTag(metalTag);
+            }
+            EditorGUILayout.Space();
+            #endregion
+        }
+        if (completeButton)
+        {
+            EditorGUILayout.LabelField("Create Player Controller");
+            #region Create Character Controller
+            GUI.color = Color.yellow;
+            GUILayout.Label("Character Controller:-", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleLeft, fontStyle = FontStyle.Bold, fontSize = 13 }, GUILayout.ExpandWidth(true));
+            GUI.color = Color.white;
+            Rect buttonRect = GUILayoutUtility.GetRect(200, 50); // Define button dimensions
+            if (GUI.Button(buttonRect, "Create Player."))
+            {
+
+            }
+            EditorGUILayout.Space();
+            #endregion
+            #region Create Rigidbody Controller
+            GUI.color = Color.yellow;
+            GUILayout.Label("Rigidbody Controller:-", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleLeft, fontStyle = FontStyle.Bold, fontSize = 13 }, GUILayout.ExpandWidth(true));
+            GUI.color = Color.white;
+            Rect inputButtonRect = GUILayoutUtility.GetRect(200, 50); // Define button dimensions
+            if (GUI.Button(inputButtonRect, "Create Player."))
+            {
+
             }
             EditorGUILayout.Space();
             #endregion
@@ -190,24 +229,6 @@ public class NDSEditor : EditorWindow
         EditorGUILayout.EndVertical();
 
         EditorGUILayout.EndHorizontal();
-        /*
-        
-
-        #region Create Controller
-        GUI.color = Color.black;
-        EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
-        GUILayout.Label("Tag Creation.", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Bold, fontSize = 13 }, GUILayout.ExpandWidth(true));
-        GUI.color = Color.white;
-        GUILayout.Space(20); // Add some vertical spacing
-        Rect ccButtonRect = GUILayoutUtility.GetRect(200, 50); // Define button dimensions
-        ccButtonRect.x = (EditorGUIUtility.currentViewWidth - ccButtonRect.width) * 0.5f; // Center the button horizontally
-        if (GUI.Button(ccButtonRect, "Create Tag"))
-        {
-            // Code to execute when the button is clicked
-            CreateTag();
-        }
-        EditorGUILayout.Space();
-        #endregion*/
     }
 
     #region CineMachine
@@ -222,6 +243,54 @@ public class NDSEditor : EditorWindow
         Client.Add("com.unity.inputsystem");
     }
     #endregion
+    #region Create Layers
+    void CreateLayer(string layerName)
+    {
+        SerializedObject tagManager = new SerializedObject(AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/TagManager.asset")[0]);
+        SerializedProperty layers = tagManager.FindProperty("layers");
 
+        for (int i = 8; i < layers.arraySize; i++)
+        {
+            SerializedProperty layerSP = layers.GetArrayElementAtIndex(i);
+            if (string.IsNullOrEmpty(layerSP.stringValue))
+            {
+                layerSP.stringValue = layerName;
+                tagManager.ApplyModifiedProperties();
+                return;
+            }
+        }
+
+        Debug.LogError("No available layer slot to create the layer: " + layerName);
+    }
+    #endregion
+    #region Create Tags
+    private bool TagExists(string tagName)
+    {
+        SerializedObject tagManager = new SerializedObject(AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/TagManager.asset")[0]);
+        SerializedProperty tags = tagManager.FindProperty("tags");
+
+        for (int i = 0; i < tags.arraySize; i++)
+        {
+            SerializedProperty tagSP = tags.GetArrayElementAtIndex(i);
+            if (tagSP.stringValue == tagName)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private void CreateTag(string tagName)
+    {
+        if(TagExists(tagName))
+        {
+            Debug.LogWarning("No available tag slot to create the tag: " + tagName);
+            return;
+        }
+        UnityEditorInternal.InternalEditorUtility.AddTag(tagName);
+
+    }
+    #endregion
 }
 

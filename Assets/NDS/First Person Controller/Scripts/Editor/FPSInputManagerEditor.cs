@@ -44,7 +44,7 @@ public class FPSInputManagerEditor : Editor
         EditorGUILayout.Space();
 
         GUI.color = Color.white;
-        inp.touchPad = (TouchPad)EditorGUILayout.ObjectField(new GUIContent("Touch Pad", "Reference to the TouchPad script (sript must be placed to a panel in canvas)."), inp.touchPad, typeof(TouchPad), true);
+        inputM_UI.touchPad = (TouchPad)EditorGUILayout.ObjectField(new GUIContent("Touch Pad", "Reference to the TouchPad script (sript must be placed to a panel in canvas)."), inputM_UI.touchPad, typeof(TouchPad), true);
         EditorGUILayout.Space();
         GUI.color = Color.black;
         EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);

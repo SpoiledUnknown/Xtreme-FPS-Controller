@@ -110,6 +110,7 @@ public class FirstPersonControllerEditor : Editor
         GUI.color = Color.white;
         fpsController.isCursorLocked = EditorGUILayout.ToggleLeft(new GUIContent("Is Cursor Locked", "Defines whether Cursor is locked."), fpsController.isCursorLocked);
         fpsController.cameraFollow = (Transform)EditorGUILayout.ObjectField(new GUIContent("Camera Root", "Camera root object which acts as look at point for cinemachine."), fpsController.cameraFollow, typeof(Transform), true);
+        fpsController.cameraHeadHolder = (Transform)EditorGUILayout.ObjectField(new GUIContent("Head Holder", "Empty gameObject that acts as holder for Camera Position change (this is important because this helps in a lot of positional handling)."), fpsController.cameraHeadHolder, typeof(Transform), true);
         fpsController.playerVirtualCamera = (CinemachineVirtualCamera)EditorGUILayout.ObjectField(new GUIContent("Player Virtual Camera", "virtual Camera which player uses."), fpsController.playerVirtualCamera, typeof(CinemachineVirtualCamera), true);
         fpsController.FOV = EditorGUILayout.Slider(new GUIContent("Field Of View", "Determines the default Field Of View for the camera."), fpsController.FOV, 30f, 179f);
         fpsController.mouseSensitivity = EditorGUILayout.Slider(new GUIContent("Sensitivity", "Determines the senstivity at which camera will rotate."), fpsController.mouseSensitivity, 50f, 200f);
@@ -135,7 +136,6 @@ public class FirstPersonControllerEditor : Editor
         GUI.color = Color.white;
         fpsController.canHeadBob = EditorGUILayout.ToggleLeft(new GUIContent("Can Head Bob", "Defines whether player's head can bob or not."), fpsController.canHeadBob);
         GUI.enabled = fpsController.canHeadBob;
-        fpsController.cameraHeadBobHolder = (Transform)EditorGUILayout.ObjectField(new GUIContent("Head Bob Holder", "Empty gameObject that acts as holder for head bobbing."), fpsController.cameraHeadBobHolder, typeof(Transform), true);
         fpsController.headBobAmplitude = EditorGUILayout.Slider(new GUIContent("Head Bob Amplitude", "Determines the amplitude at which nthe head will bob."), fpsController.headBobAmplitude, 0f, 1f);
         fpsController.headBobFrequency = EditorGUILayout.Slider(new GUIContent("Head Bob Frequency", "Defines how frequently the head will bob."), fpsController.headBobFrequency, 5f, 30f);
         GUI.enabled = true;

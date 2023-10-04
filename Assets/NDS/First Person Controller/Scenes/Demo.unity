@@ -1499,7 +1499,7 @@ MonoBehaviour:
   bulletLifeTime: 5
   bulletGravitationalForce: 3
   isGunAuto: 1
-  isAimHold: 0
+  isAimHold: 1
   timeBetweenEachShots: 0.1
   timeBetweenShooting: 0.1
   Spread: 0.05
@@ -2177,9 +2177,9 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 2577547174770427236}
   - {fileID: 1635743457723733992}
   - {fileID: 8828692143674470907}
-  - {fileID: 2577547174770427236}
   m_Father: {fileID: 7074888664558268971}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -4857,7 +4857,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!223 &4801099756432378964
 Canvas:
   m_ObjectHideFlags: 0
@@ -5055,7 +5055,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &4918499915130157183
 GameObject:
   m_ObjectHideFlags: 0
@@ -5511,6 +5511,7 @@ MonoBehaviour:
   crouchSoundPlayTime: 0.45
   isCursorLocked: 1
   cameraFollow: {fileID: 1612494483844039279}
+  cameraHeadHolder: {fileID: 5485805666865026304}
   playerVirtualCamera: {fileID: 1985980806582000701}
   mouseSensitivity: 100
   maximumClamp: 90
@@ -5522,7 +5523,6 @@ MonoBehaviour:
   zoomFOV: 30
   zoomStepTime: 5
   canHeadBob: 0
-  cameraHeadBobHolder: {fileID: 5485805666865026304}
   headBobAmplitude: 0.01
   headBobFrequency: 18.5
   grassTag: grass
@@ -6098,7 +6098,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &6572438854428261868
 RectTransform:
   m_ObjectHideFlags: 0

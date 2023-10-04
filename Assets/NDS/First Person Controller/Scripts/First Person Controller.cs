@@ -74,6 +74,7 @@ namespace NDS.FirstPersonController
         // Camera
         public bool isCursorLocked;
         public Transform cameraFollow;
+        public Transform cameraHeadHolder;
         public CinemachineVirtualCamera playerVirtualCamera;
         public float mouseSensitivity;
         public float maximumClamp;
@@ -94,7 +95,6 @@ namespace NDS.FirstPersonController
 
         //Head Bobbing effect
         public bool canHeadBob;
-        public Transform cameraHeadBobHolder;
         public float headBobAmplitude = 0.01f;
         public float headBobFrequency = 18.5f;
 
@@ -164,7 +164,7 @@ namespace NDS.FirstPersonController
 
             if (!canCrouch) return;
             initialHeight = characterController.height;
-            initialCameraPosition = cameraHeadBobHolder.transform.localPosition;
+            initialCameraPosition = cameraHeadHolder.transform.localPosition;
             initialGroundCheckerPosition = groundCheckTransform.transform.localPosition;
 
             if (hasArmature)
@@ -317,7 +317,7 @@ namespace NDS.FirstPersonController
 
                 Vector3 halfHeightDifference = new Vector3(0, (initialHeight - newHeight) / 2, 0);
                 Vector3 newCameraHeight = initialCameraPosition - halfHeightDifference;
-                cameraHeadBobHolder.localPosition = newCameraHeight;
+                cameraHeadHolder.localPosition = newCameraHeight;
 
                 Vector3 halfHeightDifferenceGroundChecker = new Vector3(0, (initialHeight - newHeight) / 2, 0);
                 Vector3 newGroundCheckerHeight = initialGroundCheckerPosition + halfHeightDifferenceGroundChecker;

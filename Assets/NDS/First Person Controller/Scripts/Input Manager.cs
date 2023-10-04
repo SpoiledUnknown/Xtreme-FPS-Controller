@@ -40,6 +40,8 @@ namespace NDS.InputManager
         [HideInInspector] public bool isReloading;
         [HideInInspector] public bool isAimingTap;
         [HideInInspector] public bool isAimingHold;
+        //Peeking
+        [HideInInspector] public Vector2 peekDirection;
         #endregion
         #region Initialization
         private void Awake()
@@ -86,17 +88,17 @@ namespace NDS.InputManager
             playerInputAction.Shooting.Reload.performed += ReloadingInput;
             playerInputAction.Shooting.ADSTap.performed += ADSTapInput;
             playerInputAction.Shooting.ADSHold.performed += ADSHoldInput;
+            playerInputAction.Shooting.Peek.performed += PeekInput;
 
 
             playerInputAction.Shooting.Reload.canceled += ReloadingInput;
             playerInputAction.Shooting.FireHold.canceled += ShootInput;
             playerInputAction.Shooting.ADSHold.canceled += ADSHoldInput;
+            playerInputAction.Shooting.Peek.canceled += PeekInput;
 
 
             #endregion
         }
-
-
 
         private void Update()
         {
@@ -209,6 +211,11 @@ namespace NDS.InputManager
         {
             yield return new WaitForSeconds(0.05f);
             isFiringTap = false;
+        }
+
+        private void PeekInput(InputAction.CallbackContext context)
+        {
+            peekDirection = context.ReadValue<Vector2>();
         }
         #endregion
     }

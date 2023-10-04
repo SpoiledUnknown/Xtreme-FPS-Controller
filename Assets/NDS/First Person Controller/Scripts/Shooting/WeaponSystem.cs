@@ -56,6 +56,14 @@ namespace NDS.UniversalWeaponSystem
 
         private Vector3 normalLocalPosition;
 
+        //Peeking Right
+        public bool canPeek;
+        public Vector3 peekLeftPosition;
+        public Vector3 peekRightPosition;
+        public float peekSmoothing;
+        public Transform cameraHolderForPeeking;
+
+        private Vector3 normalLocalPeekPosition;
         //Camera Recoil 
         public bool haveCameraRecoil;
         public Transform cameraRecoilHolder;
@@ -157,11 +165,13 @@ namespace NDS.UniversalWeaponSystem
             lastPosition = transform.position;
             originalReloadRotation = gunPositionHolder.localRotation;
             normalLocalPosition = weaponHolder.transform.localPosition;
+            normalLocalPeekPosition = cameraHolderForPeeking.transform.localPosition;
         }
         private void Update()
         {
             MyInput();
             DetermineAim();
+            DeterminePeek();
             HandleWeaponSway();
             HandleTilt();
             HandleCameraRotation();
@@ -195,7 +205,6 @@ namespace NDS.UniversalWeaponSystem
                 Shoot();
             }
         }
-
         private void DetermineAim()
         {
             if (!canAim) return;
@@ -207,6 +216,23 @@ namespace NDS.UniversalWeaponSystem
             weaponHolder.transform.localPosition = desiredPosition;
         }
 
+        private void DeterminePeek()
+        {
+            if (!canPeek) return;
+            Vector3 target = normalLocalPeekPosition;
+            Debug.Log(inputManager.peekDirection.x);
+            if(inputManager.peekDirection.x == 1f)
+            {
+                target = peekRightPosition;
+            }
+            else if (inputManager.peekDirection.x == -1f)
+            {
+                target = peekLeftPosition;
+            }
+            Vector3 desiredPosition = Vector3.Lerp(cameraHolderForPeeking.transform.localPosition, target, Time.deltaTime * peekSmoothing);
+
+            cameraHolderForPeeking.transform.localPosition = desiredPosition;
+        }
         private void Shoot()
         {
             readyToShoot = false;

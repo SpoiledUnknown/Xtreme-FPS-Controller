@@ -1509,11 +1509,16 @@ MonoBehaviour:
   muzzelEffectLifeTime: 0.5
   reloadTime: 1
   reloadRotationSpeed: 186
-  haveProceduralReload: 1
+  haveProceduralReload: 0
   canAim: 1
   weaponHolder: {fileID: 8188349396706210248}
   aimingLocalPosition: {x: 0.005, y: -0.054, z: 0.2336001}
   aimSmoothing: 10
+  canPeek: 0
+  peekLeftPosition: {x: 2, y: 2, z: 2}
+  peekRightPosition: {x: 0.184, y: 0.6506549, z: 0.1719999}
+  peekSmoothing: 5
+  cameraHolderForPeeking: {fileID: 5485805666865026304}
   haveCameraRecoil: 1
   cameraRecoilHolder: {fileID: 3487580956021303034}
   recoilRotationSpeed: 6
@@ -4588,6 +4593,7 @@ MonoBehaviour:
   isReloading: 0
   isAimingTap: 0
   isAimingHold: 0
+  peekDirection: {x: 0, y: 0}
 --- !u!33 &4268342738387189260
 MeshFilter:
   m_ObjectHideFlags: 0

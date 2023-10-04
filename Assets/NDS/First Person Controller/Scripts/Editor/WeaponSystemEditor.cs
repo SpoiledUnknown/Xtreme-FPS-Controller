@@ -86,6 +86,8 @@ public class WeaponSystemEditor : Editor
         EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
         GUILayout.Label("ADS Settings", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Bold, fontSize = 13 }, GUILayout.ExpandWidth(true));
         EditorGUILayout.Space();
+        GUI.color = Color.blue;
+        GUILayout.Label("Aiming", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleLeft, fontStyle = FontStyle.Bold, fontSize = 13 }, GUILayout.ExpandWidth(true));
         GUI.color = Color.white;
         ws.canAim = EditorGUILayout.ToggleLeft(new GUIContent("ADS", "Determines if the weapon should aim or not."), ws.canAim);
         GUI.enabled = ws.canAim;
@@ -95,6 +97,16 @@ public class WeaponSystemEditor : Editor
         ws.aimSmoothing = EditorGUILayout.Slider(new GUIContent("Aim Speed", "Determines the speed at which the gun will reach aim state."), ws.aimSmoothing, 5f, 100f);
         GUI.enabled = true;
         EditorGUILayout.Space();
+        GUI.color = Color.blue;
+        GUILayout.Label("Peek", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleLeft, fontStyle = FontStyle.Bold, fontSize = 13 }, GUILayout.ExpandWidth(true));
+        GUI.color = Color.white;
+        ws.canPeek = EditorGUILayout.ToggleLeft(new GUIContent("Peek", "Determines if the player can peek or not."), ws.canPeek);
+        GUI.enabled = ws.canPeek;
+        ws.cameraHolderForPeeking = (Transform)EditorGUILayout.ObjectField(new GUIContent("Camera Holder", "Reference to the Camera Holder gameobject (gameobject parent of camera (cameraRecoil as well if game have recoil system))."), ws.cameraHolderForPeeking, typeof(Transform), true);
+        ws.peekLeftPosition = EditorGUILayout.Vector3Field(new GUIContent("Peek Left Position", "Determines the position which the gun will saty at while peeking left."), ws.peekLeftPosition);
+        ws.peekRightPosition = EditorGUILayout.Vector3Field(new GUIContent("Peek Right Position", "Determines the position which the gun will saty at while peeking right."), ws.peekRightPosition);
+        ws.peekSmoothing = EditorGUILayout.Slider(new GUIContent("Peek Speed", "Determines the speed at which the gun will reach peek state."), ws.peekSmoothing, 5f, 100f);
+        GUI.enabled = true;
 
         GUI.color = Color.black;
         EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);

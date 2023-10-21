@@ -39,12 +39,12 @@ namespace NDS.UniversalWeaponSystem
         public float reloadTime;
         public float reloadRotationSpeed = 30f;
         public bool haveProceduralReload;
+        public bool reloading;
+        public bool aiming;
 
         private int bulletsLeft;
         private int bulletsShot;
-        private bool reloading;
         private bool readyToShoot;
-        private bool aiming;
         private bool shooting;
         private Quaternion originalReloadRotation;
 

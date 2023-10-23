@@ -17,7 +17,7 @@ namespace NDS.UniversalWeaponSystem
         public FPSInputManager inputManager;
         public First_Person_Controller fpsController;
         public Transform shootPoint;
-        public GameObject muzzleFlash;
+        public ParticleSystem muzzleFlash;
         public GameObject bulletPrefab;
         public TextMeshProUGUI bulletCount;
 
@@ -25,6 +25,10 @@ namespace NDS.UniversalWeaponSystem
         public float bulletSpeed;
         public float bulletLifeTime;
         public float bulletGravitationalForce;
+
+        //Bullet Shell
+        public Transform ShellPosition;
+        public GameObject Shell;
 
         //Gun stats
         public bool isGunAuto;
@@ -56,14 +60,7 @@ namespace NDS.UniversalWeaponSystem
 
         private Vector3 normalLocalPosition;
 
-        //Peeking Right
-        public bool canPeek;
-        public Vector3 peekLeftPosition;
-        public Vector3 peekRightPosition;
-        public float peekSmoothing;
-        public Transform cameraHolderForPeeking;
-
-        private Vector3 normalLocalPeekPosition;
+       
         //Camera Recoil 
         public bool haveCameraRecoil;
         public Transform cameraRecoilHolder;
@@ -165,13 +162,11 @@ namespace NDS.UniversalWeaponSystem
             lastPosition = transform.position;
             originalReloadRotation = gunPositionHolder.localRotation;
             normalLocalPosition = weaponHolder.transform.localPosition;
-            normalLocalPeekPosition = cameraHolderForPeeking.transform.localPosition;
         }
         private void Update()
         {
             MyInput();
             DetermineAim();
-            DeterminePeek();
             HandleWeaponSway();
             HandleTilt();
             HandleCameraRotation();
@@ -215,24 +210,6 @@ namespace NDS.UniversalWeaponSystem
 
             weaponHolder.transform.localPosition = desiredPosition;
         }
-
-        private void DeterminePeek()
-        {
-            if (!canPeek) return;
-            Vector3 target = normalLocalPeekPosition;
-            Debug.Log(inputManager.peekDirection.x);
-            if(inputManager.peekDirection.x == 1f)
-            {
-                target = peekRightPosition;
-            }
-            else if (inputManager.peekDirection.x == -1f)
-            {
-                target = peekLeftPosition;
-            }
-            Vector3 desiredPosition = Vector3.Lerp(cameraHolderForPeeking.transform.localPosition, target, Time.deltaTime * peekSmoothing);
-
-            cameraHolderForPeeking.transform.localPosition = desiredPosition;
-        }
         private void Shoot()
         {
             readyToShoot = false;
@@ -248,8 +225,10 @@ namespace NDS.UniversalWeaponSystem
 
 
             //Graphics
-            GameObject muzzelEffect = Instantiate(muzzleFlash, shootPoint.position, Quaternion.identity);
-            Destroy(muzzelEffect, muzzelEffectLifeTime);
+            muzzleFlash.Play();
+            Invoke(nameof(StopMuzzleEffect), muzzelEffectLifeTime);
+
+            Instantiate(Shell, ShellPosition.position, ShellPosition.rotation);
             bulletSound.PlayOneShot(bulletSoundClip, (soundVolume * 0.01f));
             if(aiming)
             {
@@ -272,6 +251,10 @@ namespace NDS.UniversalWeaponSystem
 
             if (bulletsShot > 0 && bulletsLeft > 0)
                 Invoke(nameof(Shoot), timeBetweenEachShots);
+        }
+        private void StopMuzzleEffect()
+        {
+            muzzleFlash.Stop();
         }
         private void ResetShot()
         {

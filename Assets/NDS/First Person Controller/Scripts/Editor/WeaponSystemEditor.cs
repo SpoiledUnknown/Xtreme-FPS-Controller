@@ -40,9 +40,11 @@ public class WeaponSystemEditor : Editor
         ws.inputManager = (FPSInputManager)EditorGUILayout.ObjectField(new GUIContent("Input Manager", "Reference to Input Manager script."), ws.inputManager, typeof(FPSInputManager), true);
         ws.fpsController = (First_Person_Controller)EditorGUILayout.ObjectField(new GUIContent("Player Controller", "Reference to player controller script."), ws.fpsController, typeof(First_Person_Controller), true);
         ws.shootPoint = (Transform)EditorGUILayout.ObjectField(new GUIContent("Shoot Point", "Reference to the transform of the point fro where bullets will spawn (Ideally it should be a child of gun model itself)."), ws.shootPoint, typeof(Transform), true);
-        ws.muzzleFlash = (GameObject)EditorGUILayout.ObjectField(new GUIContent("Muzzle Flash", "Reference to the gameobject that will be spawned as muzzle flash (spawns at the co-ordinates of shootPoint)."), ws.muzzleFlash, typeof(GameObject), true);
+        ws.muzzleFlash = (ParticleSystem)EditorGUILayout.ObjectField(new GUIContent("Muzzle Flash", "Reference to the particle system that will be played (the game object should be a child of shootPoint)."), ws.muzzleFlash, typeof(ParticleSystem), true);
         ws.bulletPrefab = (GameObject)EditorGUILayout.ObjectField(new GUIContent("Bullet", "Reference to the bullet gameobject itself (it can be any same but should contain ParabolicBullet script)."), ws.bulletPrefab, typeof(GameObject), true);
         ws.bulletCount = (TextMeshProUGUI)EditorGUILayout.ObjectField(new GUIContent("Bullet Count", "Reference to the text that shows number of bullets on UI."), ws.bulletCount, typeof(TextMeshProUGUI), true);
+        ws.Shell = (GameObject)EditorGUILayout.ObjectField(new GUIContent("Bullet Shell", "Reference to the GameObject that spawns and works as the bullet shell."), ws.Shell, typeof(GameObject), true);
+        ws.ShellPosition = (Transform)EditorGUILayout.ObjectField(new GUIContent("Shell Position", "Reference to the GameObject where shell will spawn."), ws.ShellPosition, typeof(Transform), true);
         EditorGUILayout.Space();
         
         GUI.color = Color.black;
@@ -51,9 +53,9 @@ public class WeaponSystemEditor : Editor
         EditorGUILayout.Space();
         
         GUI.color = Color.white;
-        ws.bulletSpeed = EditorGUILayout.Slider(new GUIContent("Bullet Velocity", "The velocity at which the bullet will move."), ws.bulletSpeed, 200f, 1500f);
-        ws.bulletLifeTime = EditorGUILayout.Slider(new GUIContent("Bullet Life", "The time after which the bullet will despawn itself."), ws.bulletLifeTime, 5f, 100f);
-        ws.bulletGravitationalForce = EditorGUILayout.Slider(new GUIContent("Bullet Gravity", "Defines the value of gravity that will act on the bullet."), ws.bulletGravitationalForce, 0f, 15f);
+        ws.bulletSpeed = EditorGUILayout.Slider(new GUIContent("Bullet Velocity", "The velocity at which the bullet will move."), ws.bulletSpeed, 50f, 1500f);
+        ws.bulletLifeTime = EditorGUILayout.Slider(new GUIContent("Bullet Life", "The time after which the bullet will despawn itself."), ws.bulletLifeTime, 1f, 100f);
+        ws.bulletGravitationalForce = EditorGUILayout.Slider(new GUIContent("Bullet Gravity", "Defines the value of gravity that will act on the bullet."), ws.bulletGravitationalForce, 0f, 300f);
         EditorGUILayout.Space();
 
         GUI.color = Color.black;
@@ -97,16 +99,6 @@ public class WeaponSystemEditor : Editor
         ws.aimSmoothing = EditorGUILayout.Slider(new GUIContent("Aim Speed", "Determines the speed at which the gun will reach aim state."), ws.aimSmoothing, 5f, 100f);
         GUI.enabled = true;
         EditorGUILayout.Space();
-        GUI.color = Color.blue;
-        GUILayout.Label("Peek", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleLeft, fontStyle = FontStyle.Bold, fontSize = 13 }, GUILayout.ExpandWidth(true));
-        GUI.color = Color.white;
-        ws.canPeek = EditorGUILayout.ToggleLeft(new GUIContent("Peek", "Determines if the player can peek or not."), ws.canPeek);
-        GUI.enabled = ws.canPeek;
-        ws.cameraHolderForPeeking = (Transform)EditorGUILayout.ObjectField(new GUIContent("Camera Holder", "Reference to the Camera Holder gameobject (gameobject parent of camera (cameraRecoil as well if game have recoil system))."), ws.cameraHolderForPeeking, typeof(Transform), true);
-        ws.peekLeftPosition = EditorGUILayout.Vector3Field(new GUIContent("Peek Left Position", "Determines the position which the gun will saty at while peeking left."), ws.peekLeftPosition);
-        ws.peekRightPosition = EditorGUILayout.Vector3Field(new GUIContent("Peek Right Position", "Determines the position which the gun will saty at while peeking right."), ws.peekRightPosition);
-        ws.peekSmoothing = EditorGUILayout.Slider(new GUIContent("Peek Speed", "Determines the speed at which the gun will reach peek state."), ws.peekSmoothing, 5f, 100f);
-        GUI.enabled = true;
 
         GUI.color = Color.black;
         EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);

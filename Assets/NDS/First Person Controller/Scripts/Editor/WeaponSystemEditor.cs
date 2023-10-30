@@ -1,5 +1,5 @@
 using NDS.FirstPersonController;
-using NDS.InputManager;
+using NDS.InputSystem.PlayerInputHandler;
 using NDS.UniversalWeaponSystem;
 using TMPro;
 using UnityEditor;
@@ -41,6 +41,7 @@ public class WeaponSystemEditor : Editor
         ws.fpsController = (First_Person_Controller)EditorGUILayout.ObjectField(new GUIContent("Player Controller", "Reference to player controller script."), ws.fpsController, typeof(First_Person_Controller), true);
         ws.shootPoint = (Transform)EditorGUILayout.ObjectField(new GUIContent("Shoot Point", "Reference to the transform of the point fro where bullets will spawn (Ideally it should be a child of gun model itself)."), ws.shootPoint, typeof(Transform), true);
         ws.muzzleFlash = (ParticleSystem)EditorGUILayout.ObjectField(new GUIContent("Muzzle Flash", "Reference to the particle system that will be played (the game object should be a child of shootPoint)."), ws.muzzleFlash, typeof(ParticleSystem), true);
+        ws.particlesPrefab = (GameObject)EditorGUILayout.ObjectField(new GUIContent("Hit Effect", "Reference to the GameObject that will be spawned at the point where bullet hits."), ws.particlesPrefab, typeof(GameObject), true);
         ws.bulletPrefab = (GameObject)EditorGUILayout.ObjectField(new GUIContent("Bullet", "Reference to the bullet gameobject itself (it can be any same but should contain ParabolicBullet script)."), ws.bulletPrefab, typeof(GameObject), true);
         ws.bulletCount = (TextMeshProUGUI)EditorGUILayout.ObjectField(new GUIContent("Bullet Count", "Reference to the text that shows number of bullets on UI."), ws.bulletCount, typeof(TextMeshProUGUI), true);
         ws.Shell = (GameObject)EditorGUILayout.ObjectField(new GUIContent("Bullet Shell", "Reference to the GameObject that spawns and works as the bullet shell."), ws.Shell, typeof(GameObject), true);
@@ -75,12 +76,12 @@ public class WeaponSystemEditor : Editor
         ws.reloadTime = EditorGUILayout.Slider(new GUIContent("Reloading Time", "Determines the time weapon takes to reload."), ws.reloadTime, 0f, 10f);
         EditorGUILayout.Space();
         GUI.color = Color.blue;
-        GUILayout.Label("Reload Animation (Beta)", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleLeft, fontStyle = FontStyle.Bold, fontSize = 13 }, GUILayout.ExpandWidth(true));
+        GUILayout.Label("Reload Animation", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleLeft, fontStyle = FontStyle.Bold, fontSize = 13 }, GUILayout.ExpandWidth(true));
         GUI.color = Color.white;
-        ws.haveProceduralReload = EditorGUILayout.ToggleLeft(new GUIContent("Have Procedural Animation", "Determines if the gun should play built-in animation or not (turn off if you have another animation handler or you have another animation)."), ws.haveProceduralReload);
+        ws.haveProceduralReload = EditorGUILayout.ToggleLeft(new GUIContent("Have Animation", "Determines if the gun should play provided animation or not (turn off if you have another animation handler)."), ws.haveProceduralReload);
         if (ws.haveProceduralReload)
         {
-            ws.reloadRotationSpeed = EditorGUILayout.Slider(new GUIContent("Animation Speed", "Determines the speed at which the animation will play."), ws.reloadRotationSpeed, 0f, 1000f);
+            ws.animator = (Animator)EditorGUILayout.ObjectField(new GUIContent("Animator", "Reference to the Animator where animations are stored/setted up."), ws.animator, typeof(Animator), true);
         }
         EditorGUILayout.Space();
 
@@ -131,6 +132,16 @@ public class WeaponSystemEditor : Editor
         ws.recoilReturnSpeed = EditorGUILayout.Slider(new GUIContent("Recoil Return Speed", "Determines the speed at which the camera will return to its usual position."), ws.recoilReturnSpeed, 0f, 50f);
         ws.adsFireRecoil = EditorGUILayout.Vector3Field(new GUIContent("Recoil (ADS)", "Determines the recoil camera will feel while aiming."), ws.adsFireRecoil);
         ws.hipFireRecoil = EditorGUILayout.Vector3Field(new GUIContent("Recoil (Hip)", "Determines the recoil camera will feel while hipfire."), ws.hipFireRecoil);
+        GUI.enabled = true;
+        EditorGUILayout.Space();
+
+        GUI.color = Color.blue;
+        GUILayout.Label("Camera Sensitivity Recoil", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleLeft, fontStyle = FontStyle.Bold, fontSize = 13 }, GUILayout.ExpandWidth(true));
+        GUI.color = Color.white;
+        ws.haveSensyRecoil = EditorGUILayout.ToggleLeft(new GUIContent("Have Camera Recoil", "Determines if the camera should have recoil or not."), ws.haveCameraRecoil);
+        GUI.enabled = ws.haveSensyRecoil;
+        ws.hRecoil = EditorGUILayout.Slider(new GUIContent("Horizontal Recoil Sensitivity", "Determines the speed at which the camera will move horizontally."), ws.hRecoil, 0f, 1f);
+        ws.vRecoil = EditorGUILayout.Slider(new GUIContent("Vertical Recoil Sensitivity", "Determines the speed at which the camera will move vertically."), ws.vRecoil, 0f, 1f);
         GUI.enabled = true;
         EditorGUILayout.Space();
 

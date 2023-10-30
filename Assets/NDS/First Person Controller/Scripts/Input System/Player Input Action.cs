@@ -15,7 +15,7 @@ using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
 
-namespace NDS.PlayerInput
+namespace NDS.InputSystem
 {
     public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
     {

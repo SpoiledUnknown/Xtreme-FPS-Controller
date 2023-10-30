@@ -4,12 +4,11 @@
 using Unity.Burst;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using NDS.PlayerInput;
+using NDS.InputSystem;
 using System.Collections;
-using NDS.Touchscreen.DragInput;
-using System;
+using NDS.InputSystem.DragControls;
 
-namespace NDS.InputManager
+namespace NDS.InputSystem.PlayerInputHandler
 {
     [BurstCompile]
     public class FPSInputManager : MonoBehaviour

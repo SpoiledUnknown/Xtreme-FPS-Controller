@@ -2,8 +2,8 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 using TMPro;
 using Unity.Burst;
-using NDS.InputManager;
-using NDS.BulletSystem.Parabolic;
+using NDS.InputSystem.PlayerInputHandler;
+using NDS.UniversalWeaponSystem.Parabolic;
 using NDS.FirstPersonController;
 
 namespace NDS.UniversalWeaponSystem
@@ -20,6 +20,7 @@ namespace NDS.UniversalWeaponSystem
         public ParticleSystem muzzleFlash;
         public GameObject bulletPrefab;
         public TextMeshProUGUI bulletCount;
+        public Animator animator;
 
         //Bullet Physics
         public float bulletSpeed;
@@ -29,6 +30,7 @@ namespace NDS.UniversalWeaponSystem
         //Bullet Shell
         public Transform ShellPosition;
         public GameObject Shell;
+        public GameObject particlesPrefab;
 
         //Gun stats
         public bool isGunAuto;
@@ -41,7 +43,6 @@ namespace NDS.UniversalWeaponSystem
         public int bulletsPerTap;
         public float muzzelEffectLifeTime;
         public float reloadTime;
-        public float reloadRotationSpeed = 30f;
         public bool haveProceduralReload;
         public bool reloading;
         public bool aiming;
@@ -68,6 +69,10 @@ namespace NDS.UniversalWeaponSystem
         public float recoilReturnSpeed;
         public Vector3 hipFireRecoil = new Vector3(2f, 2f, 2f);
         public Vector3 adsFireRecoil = new Vector3(0.5f, 0.5f, 0.5f);
+
+        public bool haveSensyRecoil;
+        public float hRecoil;
+        public float vRecoil;
 
         private Vector3 currentRotation;
         private Vector3 Rot;
@@ -153,6 +158,7 @@ namespace NDS.UniversalWeaponSystem
         #region MonoBehaviour Callbacks
         private void Start()
         {
+            fpsController.haveCameraRecoil = haveSensyRecoil;
             bulletsLeft = magazineSize;
             readyToShoot = true;
             bulletSound = GetComponent<AudioSource>();
@@ -199,6 +205,10 @@ namespace NDS.UniversalWeaponSystem
                 bulletsShot = bulletsPerTap;
                 Shoot();
             }
+            else
+            {
+                fpsController.AddRecoil(0f, 0f);
+            }
         }
         private void DetermineAim()
         {
@@ -219,7 +229,7 @@ namespace NDS.UniversalWeaponSystem
             ParabolicBullet bulletScript = bullet.GetComponent<ParabolicBullet>();
             if (bulletScript)
             {
-                bulletScript.Initialize(shootPoint, bulletSpeed, bulletGravitationalForce, Spread);
+                bulletScript.Initialize(shootPoint, bulletSpeed, bulletGravitationalForce, Spread, particlesPrefab);
             }
             Destroy(bullet, bulletLifeTime);
 
@@ -230,12 +240,15 @@ namespace NDS.UniversalWeaponSystem
 
             Instantiate(Shell, ShellPosition.position, ShellPosition.rotation);
             bulletSound.PlayOneShot(bulletSoundClip, (soundVolume * 0.01f));
+            float hRecoil = Random.Range(-this.hRecoil, this.hRecoil);
             if(aiming)
             {
                 currentRotation += new Vector3(-adsFireRecoil.x, Random.Range(-adsFireRecoil.y, adsFireRecoil.y), Random.Range(-adsFireRecoil.z, adsFireRecoil.z));
 
                 rotationRecoil += new Vector3(-recoilRotationAds.x, Random.Range(-recoilRotationAds.y, recoilRotationAds.y), Random.Range(-recoilRotationAds.z, recoilRotationAds.z));
                 positionRecoil += new Vector3(Random.Range(-recoilKickBackAds.x, recoilKickBackAds.y), Random.Range(-recoilKickBackAds.y, recoilKickBackAds.y), recoilKickBackAds.z);
+
+                fpsController.AddRecoil(hRecoil * 0.5f, vRecoil * 0.5f);
             }
             else
             {
@@ -243,6 +256,8 @@ namespace NDS.UniversalWeaponSystem
 
                 rotationRecoil += new Vector3(-recoilRotationHip.x, Random.Range(-recoilRotationHip.y, recoilRotationHip.y), Random.Range(-recoilRotationHip.z, recoilRotationHip.z));
                 positionRecoil += new Vector3(Random.Range(-recoilKickBackHip.x, recoilKickBackHip.y), Random.Range(-recoilKickBackHip.y, recoilKickBackHip.y), recoilKickBackHip.z);
+                
+                fpsController.AddRecoil(hRecoil, vRecoil);
             }
             bulletsLeft--;
             bulletsShot--;
@@ -265,18 +280,17 @@ namespace NDS.UniversalWeaponSystem
             if (!haveProceduralReload || aiming) return;
             if (reloading)
             {
-                // Rotate the object continuously
-                gunPositionHolder.Rotate(Vector3.forward, reloadRotationSpeed * Time.deltaTime);
+                animator.SetBool("IsReloading", true);
             }
             else
             {
-                // Return to the original rotation
-                gunPositionHolder.localRotation = Quaternion.Lerp(gunPositionHolder.localRotation, originalReloadRotation, reloadRotationSpeed * Time.deltaTime);
+                animator.SetBool("IsReloading", false);
             }
             
         }
         private void Reload()
         {
+            //fpsController.AddRecoil(0f, 0f);
             if (totalBullets >= magazineSize)
             {
                 reloading = true;

@@ -4,7 +4,7 @@
 using System.Collections;
 using Unity.Burst;
 using UnityEngine;
-using NDS.InputManager;
+using NDS.InputSystem.PlayerInputHandler;
 using Cinemachine;
 using UnityEngine.UI;
 
@@ -135,6 +135,12 @@ namespace NDS.FirstPersonController
         public float newArmatureHeight;
 
         private float originalArmatureHeight;
+
+        //Recoil For Weapon System;
+        public bool haveCameraRecoil = false;
+
+        private float hRecoil = 0f;
+        private float vRecoil = 0f;
 
 #if UNITY_EDITOR
         // Debug Only
@@ -324,10 +330,17 @@ namespace NDS.FirstPersonController
                 groundCheckTransform.localPosition = newGroundCheckerHeight;
         }
         #endregion
+        public void AddRecoil(float hRecoil, float vRecoil)
+        {
+            if (!haveCameraRecoil) return;
+            this.hRecoil = hRecoil;
+            this.vRecoil = vRecoil;
+        }
+
         private void HandleCameraLook()
         {
-            float mouseDirectionX = inputManager.mouseDirection.x * mouseSensitivity * Time.deltaTime;
-            float mouseDirectionY = inputManager.mouseDirection.y * mouseSensitivity * Time.deltaTime;
+            float mouseDirectionX = inputManager.mouseDirection.x * mouseSensitivity * Time.deltaTime + hRecoil;
+            float mouseDirectionY = inputManager.mouseDirection.y * mouseSensitivity * Time.deltaTime + vRecoil;
 
             rotationY -= mouseDirectionY;
             rotationY = Mathf.Clamp(rotationY, minimumClamp, maximumClamp);

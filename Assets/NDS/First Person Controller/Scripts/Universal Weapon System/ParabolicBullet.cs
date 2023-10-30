@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
+using NDS.UniversalWeaponSystem.ShootableObjects;
 
-namespace NDS.BulletSystem.Parabolic
+namespace NDS.UniversalWeaponSystem.Parabolic
 {
     public class ParabolicBullet : MonoBehaviour
     {
@@ -11,6 +12,7 @@ namespace NDS.BulletSystem.Parabolic
         private Transform startTransform;
         private Vector3 startPosition;
         private Vector3 startForward;
+        private GameObject particlesPrefab;
 
         private bool isInitialized = false;
 
@@ -18,13 +20,14 @@ namespace NDS.BulletSystem.Parabolic
         #endregion
 
         #region Initialization
-        public void Initialize(Transform startPoint, float speed, float gravity, float Spread)
+        public void Initialize(Transform startPoint, float speed, float gravity, float Spread, GameObject particlePrefab)
         {
             this.startTransform = startPoint;
             this.startForward = startPoint.forward.normalized;
             this.speed = speed;
             this.gravity = gravity;
             this.Spread = Spread;
+            this.particlesPrefab = particlePrefab;
             isInitialized = true;
         }
         #endregion
@@ -100,6 +103,11 @@ namespace NDS.BulletSystem.Parabolic
             if (shootableObject)
             {
                 shootableObject.OnHit(hit);
+            }
+            else
+            {
+                GameObject instantiatedParticles = (GameObject)Instantiate(particlesPrefab, hit.point + hit.normal * 0.05f, Quaternion.LookRotation(hit.normal), transform.root.parent);
+                Destroy(instantiatedParticles, 2f);
             }
             Destroy(gameObject);
         }

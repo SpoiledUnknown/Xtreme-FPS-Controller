@@ -5,7 +5,7 @@ using Unity.Burst;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace NDS.Touchscreen.DragInput
+namespace NDS.InputSystem.DragControls
 {
     [BurstCompile]
     public class TouchPad : MonoBehaviour, IPointerDownHandler, IPointerUpHandler

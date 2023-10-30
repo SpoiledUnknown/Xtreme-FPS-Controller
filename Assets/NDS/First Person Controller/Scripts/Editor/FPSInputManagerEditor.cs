@@ -3,8 +3,8 @@
 /*Note: This is an important editor script*/
 
 using UnityEditor;
-using NDS.InputManager;
-using NDS.Touchscreen.DragInput;
+using NDS.InputSystem.PlayerInputHandler;
+using NDS.InputSystem.DragControls;
 using UnityEngine;
 using Cinemachine;
 using UnityEditor.PackageManager;

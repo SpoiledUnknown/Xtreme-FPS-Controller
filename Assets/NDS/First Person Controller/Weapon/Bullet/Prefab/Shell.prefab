@@ -148,5 +148,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minForce: 120
   maxForce: 150
-  rb: {fileID: -6210724771801967858}
-  lifeTime: 8
+  lifeTime: 4

@@ -1758,20 +1758,6 @@ Transform:
   - {fileID: 2903787248629356699}
   m_Father: {fileID: 6848046708001038552}
   m_LocalEulerAnglesHint: {x: 19.053663, y: 46.96663, z: 41.399124}
---- !u!114 &783420259031667044
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1493433258600106241}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8f9e0e9707ac47f499a4214520d60f89, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  weaponSystem: {fileID: 7887471816498991247}
-  animator: {fileID: 4628902067269875429}
 --- !u!4 &807152967579707843
 Transform:
   m_ObjectHideFlags: 0
@@ -2507,7 +2493,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7468424603012009037}
   - component: {fileID: 4628902067269875429}
-  - component: {fileID: 783420259031667044}
   m_Layer: 0
   m_Name: Model
   m_TagString: Untagged
@@ -8074,6 +8059,7 @@ MonoBehaviour:
   hasArmature: 0
   armature: {fileID: 0}
   newArmatureHeight: 0
+  haveCameraRecoil: 0
   debugMode: 1
 --- !u!23 &6844994047781600914
 MeshRenderer:
@@ -9094,11 +9080,14 @@ MonoBehaviour:
   bulletPrefab: {fileID: 1660800468149884, guid: afc9c0a592c2d3e408e67df46bacd613,
     type: 3}
   bulletCount: {fileID: 7764894595230526310}
+  animator: {fileID: 4628902067269875429}
   bulletSpeed: 250
   bulletLifeTime: 20
   bulletGravitationalForce: 200
   ShellPosition: {fileID: 2475401035723502547}
   Shell: {fileID: 2046857199201600465, guid: adb843424a0f88a4ea26c84473f521d2, type: 3}
+  particlesPrefab: {fileID: 1000010254994808, guid: 9defeac88977c0d448aa4541073ee9e4,
+    type: 3}
   isGunAuto: 1
   isAimHold: 0
   timeBetweenEachShots: 0.1
@@ -9109,8 +9098,7 @@ MonoBehaviour:
   bulletsPerTap: 1
   muzzelEffectLifeTime: 1
   reloadTime: 2.3
-  reloadRotationSpeed: 186
-  haveProceduralReload: 0
+  haveProceduralReload: 1
   reloading: 0
   aiming: 0
   canAim: 1
@@ -9123,6 +9111,9 @@ MonoBehaviour:
   recoilReturnSpeed: 25
   hipFireRecoil: {x: 4, y: 4, z: 4}
   adsFireRecoil: {x: 2, y: 2, z: 2}
+  haveSensyRecoil: 1
+  hRecoil: 0.215
+  vRecoil: 0.221
   haveWeaponRecoil: 1
   gunRotationHolder: {fileID: 3420981330360721046}
   gunPositionHolder: {fileID: 5929661503979225046}

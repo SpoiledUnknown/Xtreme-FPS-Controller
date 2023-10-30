@@ -277,7 +277,7 @@ namespace NDS.UniversalWeaponSystem
         }
         private void HandleReloadAnimation()
         {
-            if (!haveProceduralReload || aiming) return;
+            if (!haveProceduralReload) return;
             if (reloading)
             {
                 animator.SetBool("IsReloading", true);

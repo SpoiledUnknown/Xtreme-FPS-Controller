@@ -1,6 +1,9 @@
+/*Copyright © Non-Dynamic Studios*/
+/*2023*/
+/*Note: This is an important editor script*/
+
 using UnityEditor;
 using UnityEditor.PackageManager;
-using UnityEditorInternal;
 using UnityEngine;
 
 public class NDSEditor : EditorWindow

@@ -2,7 +2,6 @@
 /*2023*/
 
 using System.Collections;
-using Unity.Burst;
 using UnityEngine;
 using NDS.InputSystem.PlayerInputHandler;
 using Cinemachine;
@@ -10,7 +9,6 @@ using UnityEngine.UI;
 
 namespace NDS.FirstPersonController
 {
-    [BurstCompile]
     [RequireComponent(typeof(CharacterController))]
     [RequireComponent(typeof(FPSInputManager))]
     [RequireComponent(typeof(AudioSource))]
@@ -24,6 +22,15 @@ namespace NDS.FirstPersonController
         public float transitionSpeed;
         public float walkSpeed = 5f;
         public float walkSoundSpeed;
+        // Define different player movement states
+        private enum PlayerMovementState
+        {
+            Sprinting,
+            Crouching,
+            Walking,
+            Default
+        }
+
         //sprinting
         public bool playerCanSprint;
         public bool unlimitedSprinting;
@@ -230,50 +237,48 @@ namespace NDS.FirstPersonController
         private void HandleSprinting()
         {
 
-            if (playerCanSprint)
+            if (!playerCanSprint) return;
+            if (isSprintHold) isSprinting = inputManager.isSprintingHold;
+            else isSprinting = inputManager.isSprintingTap;
+            if (isSprinting)
             {
-                if (isSprintHold) isSprinting = inputManager.isSprintingHold;
-                else isSprinting = inputManager.isSprintingTap;
-                if (isSprinting)
+                // Drain sprint remaining while sprinting
+                if (!unlimitedSprinting)
                 {
-                    // Drain sprint remaining while sprinting
-                    if (!unlimitedSprinting)
+                    sprintRemaining -= 1 * Time.deltaTime;
+                    if (sprintRemaining <= 0)
                     {
-                        sprintRemaining -= 1 * Time.deltaTime;
-                        if (sprintRemaining <= 0)
-                        {
-                            isSprinting = false;
-                            isSprintCooldown = true;
-                        }
+                        isSprinting = false;
+                        isSprintCooldown = true;
                     }
                 }
-                else
-                {
-                    // Regain sprint while not sprinting
-                    sprintRemaining = Mathf.Clamp(sprintRemaining += 1 * Time.deltaTime, 0, sprintDuration);
-                }
+            }
+            else
+            {
+                // Regain sprint while not sprinting
+                sprintRemaining = Mathf.Clamp(sprintRemaining += 1 * Time.deltaTime, 0, sprintDuration);
+            }
 
-                // Handles sprint cooldown 
-                // When sprint remaining == 0 stops sprint ability until hitting cooldown
-                if (isSprintCooldown)
+            // Handles sprint cooldown 
+            // When sprint remaining == 0 stops sprint ability until hitting cooldown
+            if (isSprintCooldown)
+            {
+                sprintCooldown -= 1 * Time.deltaTime;
+                if (sprintCooldown <= 0)
                 {
-                    sprintCooldown -= 1 * Time.deltaTime;
-                    if (sprintCooldown <= 0)
-                    {
-                        isSprintCooldown = false;
-                    }
+                    isSprintCooldown = false;
                 }
-                else
-                {
-                    sprintCooldown = sprintCooldownReset;
-                }
+            }
+            else
+            {
+                sprintCooldown = sprintCooldownReset;
+            }
 
-                // Handles sprintBar 
-                if (hasStaminaBar && !unlimitedSprinting)
-                {
-                    float sprintRemainingPercent = sprintRemaining / sprintDuration;
-                    staminaSlider.value = sprintRemainingPercent;
-                }
+            // Handles sprintBar 
+            if (hasStaminaBar && !unlimitedSprinting)
+            {
+                float sprintRemainingPercent = sprintRemaining / sprintDuration;
+                staminaSlider.value = sprintRemainingPercent;
             }
         }
         #region Crouch System
@@ -350,14 +355,12 @@ namespace NDS.FirstPersonController
         }
         private void HandleZoom()
         {
-          if (enableZoom)
-          {
+            if (!enableZoom) return;
+            if (isZoomingHold) isZoomed = inputManager.isZoomingHold && !isSprinting;
+            else isZoomed = inputManager.isZoomingTap && !isSprinting;
 
-                if (isZoomingHold) isZoomed = inputManager.isZoomingHold && !isSprinting;
-                else isZoomed = inputManager.isZoomingTap && !isSprinting;
-
-                // Lerps camera.fieldOfView to allow for a smooth transistion
-                if (isZoomed)
+            // Lerps camera.fieldOfView to allow for a smooth transistion
+            if (isZoomed)
             {
                 playerVirtualCamera.m_Lens.FieldOfView = Mathf.Lerp(playerVirtualCamera.m_Lens.FieldOfView, zoomFOV, zoomStepTime * Time.deltaTime);
             }
@@ -365,7 +368,6 @@ namespace NDS.FirstPersonController
             {
                 playerVirtualCamera.m_Lens.FieldOfView = Mathf.Lerp(playerVirtualCamera.m_Lens.FieldOfView, FOV, zoomStepTime * Time.deltaTime);
             }
-          }
         }
         private void AdjustFOVSettings(float targetFOV) 
         {
@@ -384,29 +386,53 @@ namespace NDS.FirstPersonController
         private void HandleMovements()
         {
             if (!playerCanMove) return;
+            PlayerMovementState movementState = PlayerMovementState.Default;
             bool approxHeight = Mathf.Approximately(characterController.height, initialHeight);
             if (isSprinting && !inputManager.isCrouchingTap && playerCanSprint && approxHeight)
             {
-                AudioEffectSpeed = sprintSoundSpeed;
-                targetSpeed = sprintSpeed;
-                AdjustFOVSettings(sprintFOV);
+                movementState = PlayerMovementState.Sprinting;
             }
-            else if(inputManager.isCrouchingTap)
+            else if (inputManager.isCrouchingTap)
             {
-                targetSpeed = crouchedSpeed;
+                movementState = PlayerMovementState.Crouching;
             }
             else if (!isSprinting && characterController.height > 1.2f)
             {
-                AudioEffectSpeed = walkSoundSpeed;
-                targetSpeed = walkSpeed;
-                AdjustFOVSettings(FOV);
+                movementState = PlayerMovementState.Walking;
             }
-
+            SwitchMoveState(movementState);
             moveDirection = inputManager.moveDirection.x * targetSpeed * Time.deltaTime * transform.right
                 + inputManager.moveDirection.y * targetSpeed * Time.deltaTime * transform.forward;
 
             characterController.Move(moveDirection);
         }
+
+        private void SwitchMoveState(PlayerMovementState movementState)
+        {
+            switch (movementState)
+            {
+                case PlayerMovementState.Sprinting:
+                    AudioEffectSpeed = sprintSoundSpeed;
+                    targetSpeed = sprintSpeed;
+                    AdjustFOVSettings(sprintFOV);
+                    break;
+
+                case PlayerMovementState.Crouching:
+                    targetSpeed = crouchedSpeed;
+                    break;
+
+                case PlayerMovementState.Walking:
+                    AudioEffectSpeed = walkSoundSpeed;
+                    targetSpeed = walkSpeed;
+                    AdjustFOVSettings(FOV);
+                    break;
+
+                case PlayerMovementState.Default:
+                    // Handle the default state or add additional logic here.
+                    break;
+            }
+        }
+
         private void GravityAndJump()
         {
             bool isPreviouslyGrounded = isGrounded; // Store previous grounded state

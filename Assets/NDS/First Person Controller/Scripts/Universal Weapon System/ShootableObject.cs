@@ -1,5 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿/*Copyright © Non-Dynamic Studios*/
+/*2023*/
+
 using UnityEngine;
 
 namespace NDS.UniversalWeaponSystem.ShootableObjects

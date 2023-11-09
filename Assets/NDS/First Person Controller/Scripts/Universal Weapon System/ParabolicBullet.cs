@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿/*Copyright © Non-Dynamic Studios*/
+/*2023*/
+
+using UnityEngine;
 using NDS.UniversalWeaponSystem.ShootableObjects;
 
 namespace NDS.UniversalWeaponSystem.Parabolic

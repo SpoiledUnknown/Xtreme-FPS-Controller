@@ -1,16 +1,13 @@
 /*Copyright © Non-Dynamic Studio*/
 /*2023*/
 
-using Unity.Burst;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using NDS.InputSystem;
 using System.Collections;
 using NDS.InputSystem.DragControls;
 
 namespace NDS.InputSystem.PlayerInputHandler
 {
-    [BurstCompile]
     public class FPSInputManager : MonoBehaviour
     {
         #region Variables

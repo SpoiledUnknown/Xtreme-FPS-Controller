@@ -1,3 +1,7 @@
+/*Copyright © Non-Dynamic Studios*/
+/*2023*/
+/*Note: This is an important editor script*/
+
 using NDS.UniversalWeaponSystem.ShellEjection;
 using UnityEditor;
 using UnityEngine;

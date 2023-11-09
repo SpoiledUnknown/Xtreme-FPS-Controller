@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿/*Copyright © Non-Dynamic Studios*/
+/*2023*/
+
+using UnityEngine;
 using NDS.UniversalWeaponSystem.ShootableObjects;
 
 public class WallHit : ShootableObject

@@ -1,14 +1,15 @@
+/*Copyright © Non-Dynamic Studios*/
+/*2023*/
+
 using UnityEngine;
 using Random = UnityEngine.Random;
 using TMPro;
-using Unity.Burst;
 using NDS.InputSystem.PlayerInputHandler;
 using NDS.UniversalWeaponSystem.Parabolic;
 using NDS.FirstPersonController;
 
 namespace NDS.UniversalWeaponSystem
 {
-    [BurstCompile]
     [RequireComponent(typeof(AudioSource))]
     public class WeaponSystem : MonoBehaviour
     {
@@ -197,7 +198,7 @@ namespace NDS.UniversalWeaponSystem
             mouseY = inputManager.mouseDirection.y;
             if (isAimHold) aiming = inputManager.isAimingHold;
             else aiming = inputManager.isAimingTap;
-            if (inputManager.isReloading && bulletsLeft < magazineSize && !reloading) Reload();
+            if ((inputManager.isReloading || bulletsLeft == 0) && bulletsLeft < magazineSize && totalBullets > 0 &&!reloading) Reload();
 
             //Shoot
             if (readyToShoot && shooting && !reloading && bulletsLeft > 0)
@@ -241,24 +242,23 @@ namespace NDS.UniversalWeaponSystem
             Instantiate(Shell, ShellPosition.position, ShellPosition.rotation);
             bulletSound.PlayOneShot(bulletSoundClip, (soundVolume * 0.01f));
             float hRecoil = Random.Range(-this.hRecoil, this.hRecoil);
-            if(aiming)
+            switch (aiming)
             {
-                currentRotation += new Vector3(-adsFireRecoil.x, Random.Range(-adsFireRecoil.y, adsFireRecoil.y), Random.Range(-adsFireRecoil.z, adsFireRecoil.z));
+                case true:
+                    currentRotation += new Vector3(-adsFireRecoil.x, Random.Range(-adsFireRecoil.y, adsFireRecoil.y), Random.Range(-adsFireRecoil.z, adsFireRecoil.z));
+                    rotationRecoil += new Vector3(-recoilRotationAds.x, Random.Range(-recoilRotationAds.y, recoilRotationAds.y), Random.Range(-recoilRotationAds.z, recoilRotationAds.z));
+                    positionRecoil += new Vector3(Random.Range(-recoilKickBackAds.x, recoilKickBackAds.y), Random.Range(-recoilKickBackAds.y, recoilKickBackAds.y), recoilKickBackAds.z);
+                    fpsController.AddRecoil(hRecoil * 0.5f, vRecoil * 0.5f);
+                    break;
 
-                rotationRecoil += new Vector3(-recoilRotationAds.x, Random.Range(-recoilRotationAds.y, recoilRotationAds.y), Random.Range(-recoilRotationAds.z, recoilRotationAds.z));
-                positionRecoil += new Vector3(Random.Range(-recoilKickBackAds.x, recoilKickBackAds.y), Random.Range(-recoilKickBackAds.y, recoilKickBackAds.y), recoilKickBackAds.z);
-
-                fpsController.AddRecoil(hRecoil * 0.5f, vRecoil * 0.5f);
+                case false:
+                    currentRotation += new Vector3(-hipFireRecoil.x, Random.Range(-hipFireRecoil.y, hipFireRecoil.y), Random.Range(-hipFireRecoil.z, hipFireRecoil.z));
+                    rotationRecoil += new Vector3(-recoilRotationHip.x, Random.Range(-recoilRotationHip.y, recoilRotationHip.y), Random.Range(-recoilRotationHip.z, recoilRotationHip.z));
+                    positionRecoil += new Vector3(Random.Range(-recoilKickBackHip.x, recoilKickBackHip.y), Random.Range(-recoilKickBackHip.y, recoilKickBackHip.y), recoilKickBackHip.z);
+                    fpsController.AddRecoil(hRecoil, vRecoil);
+                    break;
             }
-            else
-            {
-                currentRotation += new Vector3(-hipFireRecoil.x, Random.Range(-hipFireRecoil.y, hipFireRecoil.y), Random.Range(-hipFireRecoil.z, hipFireRecoil.z));
 
-                rotationRecoil += new Vector3(-recoilRotationHip.x, Random.Range(-recoilRotationHip.y, recoilRotationHip.y), Random.Range(-recoilRotationHip.z, recoilRotationHip.z));
-                positionRecoil += new Vector3(Random.Range(-recoilKickBackHip.x, recoilKickBackHip.y), Random.Range(-recoilKickBackHip.y, recoilKickBackHip.y), recoilKickBackHip.z);
-                
-                fpsController.AddRecoil(hRecoil, vRecoil);
-            }
             bulletsLeft--;
             bulletsShot--;
 
@@ -278,36 +278,47 @@ namespace NDS.UniversalWeaponSystem
         private void HandleReloadAnimation()
         {
             if (!haveProceduralReload) return;
-            if (reloading)
+            switch (reloading)
             {
-                animator.SetBool("IsReloading", true);
+                case true:
+                    animator.SetBool("IsReloading", true);
+                    // You can add more code here if needed when reloading is true.
+                    break;
+                case false:
+                    animator.SetBool("IsReloading", false);
+                    // You can add more code here if needed when reloading is false.
+                    break;
             }
-            else
-            {
-                animator.SetBool("IsReloading", false);
-            }
-            
         }
         private void Reload()
         {
-            //fpsController.AddRecoil(0f, 0f);
-            if (totalBullets >= magazineSize)
-            {
-                reloading = true;
-                bulletSound.PlayOneShot(bulletReloadClip, (soundVolume * 0.01f));
-                Invoke(nameof(ReloadFinished), reloadTime);
-                
-            }
+            reloading = true;
+            bulletSound.PlayOneShot(bulletReloadClip, (soundVolume * 0.01f));
+            Invoke(nameof(ReloadFinished), reloadTime);
         }
         private void ReloadFinished()
         {
-            if (totalBullets >= magazineSize)
+            switch (totalBullets.CompareTo(magazineSize))
             {
-                bulletsLeft = magazineSize;
-                totalBullets -= magazineSize;
-                reloading = false;
+                case 1:  // totalBullets > magazineSize
+                    bulletsLeft = magazineSize;
+                    totalBullets -= magazineSize;
+                    reloading = false;
+                    break;
+                case 0:  // totalBullets == magazineSize
+                    bulletsLeft = magazineSize;
+                    totalBullets -= magazineSize;
+                    reloading = false;
+                    break;
+                case -1: // totalBullets < magazineSize
+                    bulletsLeft = totalBullets;
+                    totalBullets = 0;
+                    reloading = false;
+                    break;
+                default:
+                    // Handle the case when totalBullets and magazineSize cannot be compared directly
+                    break;
             }
-
         }
         private void HandleWeaponSway()
         {
@@ -364,53 +375,57 @@ namespace NDS.UniversalWeaponSystem
         {
             if(!haveBobbing) return;
 
-            if (fpsController.isGrounded)
+            switch (fpsController.isGrounded)
             {
-                float delta = Time.deltaTime * idleSpeed;
-                float velocity = (lastPosition - transform.position).magnitude * walkSpeedMultiplier;
-                delta += Mathf.Clamp(velocity, 0, walkSpeedMax);
+                case true:
+                    float delta = Time.deltaTime * idleSpeed;
+                    float velocity = (lastPosition - transform.position).magnitude * walkSpeedMultiplier;
+                    delta += Mathf.Clamp(velocity, 0, walkSpeedMax);
+                    sinX += delta / 2;
+                    sinY += delta;
+                    sinX %= Mathf.PI * 2;
+                    sinY %= Mathf.PI * 2;
+                    float magnitude = aiming ? this.magnitude / aimReduction : this.magnitude;
+                    transform.localPosition = Vector3.zero + magnitude * Mathf.Sin(sinY) * Vector3.up;
+                    transform.localPosition += magnitude * Mathf.Sin(sinX) * Vector3.right;
+                    break;
 
-                // Reduce by two so that the gun animation is more U shaped
-                sinX += delta / 2;
-                sinY += delta;
-
-                sinX %= Mathf.PI * 2;
-                sinY %= Mathf.PI * 2;
-
-                float magnitude = aiming ? this.magnitude / aimReduction : this.magnitude;
-                transform.localPosition = Vector3.zero + magnitude * Mathf.Sin(sinY) * Vector3.up;
-                transform.localPosition += magnitude * Mathf.Sin(sinX) * Vector3.right;
+                case false:
+                    transform.localPosition = Vector3.Lerp(transform.localPosition, Vector3.zero, Time.deltaTime);
+                    break;
             }
-            else
-            {
-                transform.localPosition = Vector3.Lerp(transform.localPosition, Vector3.zero, Time.deltaTime);
-            }
+
             lastPosition = transform.position;
         }
         private void JumpSwayEffect()
         {
             if(!haveJumpSway || aiming) return;
 
-            if (!fpsController.isGrounded)
+            switch (fpsController.isGrounded)
             {
-                float yVelocity = fpsController.jumpVelocity.y;
-                yVelocity = Mathf.Clamp(yVelocity, -weaponMinClamp, weaponMaxClamp);
-                impactForce = -yVelocity * landingIntensity;
-                if (aiming)
-                {
-                    yVelocity = Mathf.Max(yVelocity, 0);
-                }
-                this.transform.localRotation = Quaternion.Lerp(this.transform.localRotation, Quaternion.Euler(0f, 0f, yVelocity * jumpIntensity), Time.deltaTime * jumpSmooth);
+                case false:
+                    float yVelocity = fpsController.jumpVelocity.y;
+                    yVelocity = Mathf.Clamp(yVelocity, -weaponMinClamp, weaponMaxClamp);
+                    impactForce = -yVelocity * landingIntensity;
+
+                    if (aiming)
+                    {
+                        yVelocity = Mathf.Max(yVelocity, 0);
+                    }
+
+                    this.transform.localRotation = Quaternion.Lerp(this.transform.localRotation, Quaternion.Euler(0f, 0f, yVelocity * jumpIntensity), Time.deltaTime * jumpSmooth);
+                    break;
+
+                case true when impactForce >= 0:
+                    this.transform.localRotation = Quaternion.Lerp(this.transform.localRotation, Quaternion.Euler(0, 0, impactForce), Time.deltaTime * landingSmooth);
+                    impactForce -= recoverySpeed * Time.deltaTime;
+                    break;
+
+                case true:
+                    this.transform.localRotation = Quaternion.Lerp(this.transform.localRotation, Quaternion.identity, Time.deltaTime * landingSmooth);
+                    break;
             }
-            else if (fpsController.isGrounded & impactForce >= 0)
-            {
-                this.transform.localRotation = Quaternion.Lerp(this.transform.localRotation, Quaternion.Euler(0, 0, impactForce), Time.deltaTime * landingSmooth);
-                impactForce -= recoverySpeed * Time.deltaTime;
-            }
-            else
-            {
-                this.transform.localRotation = Quaternion.Lerp(this.transform.localRotation, Quaternion.identity, Time.deltaTime * landingSmooth);
-            }
+
         }
         private void SetUIElements()
         {

@@ -793,7 +793,7 @@ GameObject:
   - component: {fileID: 1249790609}
   - component: {fileID: 1249790608}
   - component: {fileID: 1249790613}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: Cube (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -868,7 +868,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 7ab977a21c92388468ee65ad1c0e5a78, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -925,8 +925,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2c860490a3a3564e9cec0fb78e76a58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  particlesPrefab: {fileID: 2809105131655169974}
-  impactForce: 10
+  particlesPrefab: {fileID: 1000010254994808, guid: 9defeac88977c0d448aa4541073ee9e4,
+    type: 3}
+  impactForce: 200
 --- !u!1 &1292923809
 GameObject:
   m_ObjectHideFlags: 0
@@ -941,7 +942,7 @@ GameObject:
   - component: {fileID: 1292923811}
   - component: {fileID: 1292923810}
   - component: {fileID: 1292923815}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1016,7 +1017,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 7ab977a21c92388468ee65ad1c0e5a78, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1055,7 +1056,7 @@ Transform:
   m_GameObject: {fileID: 1292923809}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2.7572212, y: -0.5220003, z: -0.4791975}
+  m_LocalPosition: {x: -2.7572212, y: 3.32, z: -0.4791975}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1073,8 +1074,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2c860490a3a3564e9cec0fb78e76a58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  particlesPrefab: {fileID: 2809105131655169974}
-  impactForce: 10
+  particlesPrefab: {fileID: 1000010254994808, guid: 9defeac88977c0d448aa4541073ee9e4,
+    type: 3}
+  impactForce: 200
 --- !u!1 &1917585945
 GameObject:
   m_ObjectHideFlags: 0
@@ -1089,7 +1091,7 @@ GameObject:
   - component: {fileID: 1917585947}
   - component: {fileID: 1917585946}
   - component: {fileID: 1917585951}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: Cube (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1164,7 +1166,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 7ab977a21c92388468ee65ad1c0e5a78, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1221,8 +1223,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2c860490a3a3564e9cec0fb78e76a58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  particlesPrefab: {fileID: 2809105131655169974}
-  impactForce: 10
+  particlesPrefab: {fileID: 1000010254994808, guid: 9defeac88977c0d448aa4541073ee9e4,
+    type: 3}
+  impactForce: 200
 --- !u!1 &1981766865
 GameObject:
   m_ObjectHideFlags: 0

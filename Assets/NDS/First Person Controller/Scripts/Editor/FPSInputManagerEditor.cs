@@ -6,9 +6,6 @@ using UnityEditor;
 using NDS.InputSystem.PlayerInputHandler;
 using NDS.InputSystem.DragControls;
 using UnityEngine;
-using Cinemachine;
-using UnityEditor.PackageManager;
-using System.ComponentModel;
 
 [CustomEditor(typeof(FPSInputManager)), CanEditMultipleObjects]
 public class FPSInputManagerEditor : Editor

@@ -1,13 +1,11 @@
 /*Copyright © Non-Dynamic Studio*/
 /*2023*/
 
-using Unity.Burst;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace NDS.InputSystem.DragControls
 {
-    [BurstCompile]
     public class TouchPad : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
         #region Variables

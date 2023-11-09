@@ -1,8 +1,11 @@
+using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Exit : MonoBehaviour
 {
     private ExitInput input;
+
 
     private void Awake()
     {
@@ -23,6 +26,7 @@ public class Exit : MonoBehaviour
     {
         input.Exit.Exited.performed += Exited_performed;
     }
+
 
     private void Exited_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {

@@ -138,7 +138,7 @@ public class WeaponSystemEditor : Editor
         GUI.color = Color.blue;
         GUILayout.Label("Camera Sensitivity Recoil", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleLeft, fontStyle = FontStyle.Bold, fontSize = 13 }, GUILayout.ExpandWidth(true));
         GUI.color = Color.white;
-        ws.haveSensyRecoil = EditorGUILayout.ToggleLeft(new GUIContent("Have Camera Recoil", "Determines if the camera should have recoil or not."), ws.haveCameraRecoil);
+        ws.haveSensyRecoil = EditorGUILayout.ToggleLeft(new GUIContent("Have Camera Recoil", "Determines if the camera should have recoil or not."), ws.haveSensyRecoil);
         GUI.enabled = ws.haveSensyRecoil;
         ws.hRecoil = EditorGUILayout.Slider(new GUIContent("Horizontal Recoil Sensitivity", "Determines the speed at which the camera will move horizontally."), ws.hRecoil, 0f, 1f);
         ws.vRecoil = EditorGUILayout.Slider(new GUIContent("Vertical Recoil Sensitivity", "Determines the speed at which the camera will move vertically."), ws.vRecoil, 0f, 1f);

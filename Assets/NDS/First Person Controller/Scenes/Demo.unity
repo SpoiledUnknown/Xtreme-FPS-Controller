@@ -792,6 +792,7 @@ GameObject:
   - component: {fileID: 1249790610}
   - component: {fileID: 1249790609}
   - component: {fileID: 1249790608}
+  - component: {fileID: 1249790613}
   m_Layer: 6
   m_Name: Cube (2)
   m_TagString: Untagged
@@ -912,6 +913,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1218125575}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1249790613
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1249790607}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2c860490a3a3564e9cec0fb78e76a58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  particlesPrefab: {fileID: 2809105131655169974}
+  impactForce: 10
 --- !u!1 &1292923809
 GameObject:
   m_ObjectHideFlags: 0
@@ -925,6 +940,7 @@ GameObject:
   - component: {fileID: 1292923812}
   - component: {fileID: 1292923811}
   - component: {fileID: 1292923810}
+  - component: {fileID: 1292923815}
   m_Layer: 6
   m_Name: Cube (1)
   m_TagString: Untagged
@@ -1045,6 +1061,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1218125575}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1292923815
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1292923809}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2c860490a3a3564e9cec0fb78e76a58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  particlesPrefab: {fileID: 2809105131655169974}
+  impactForce: 10
 --- !u!1 &1917585945
 GameObject:
   m_ObjectHideFlags: 0
@@ -1058,6 +1088,7 @@ GameObject:
   - component: {fileID: 1917585948}
   - component: {fileID: 1917585947}
   - component: {fileID: 1917585946}
+  - component: {fileID: 1917585951}
   m_Layer: 6
   m_Name: Cube (3)
   m_TagString: Untagged
@@ -1178,6 +1209,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1218125575}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1917585951
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1917585945}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2c860490a3a3564e9cec0fb78e76a58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  particlesPrefab: {fileID: 2809105131655169974}
+  impactForce: 10
 --- !u!1 &1981766865
 GameObject:
   m_ObjectHideFlags: 0

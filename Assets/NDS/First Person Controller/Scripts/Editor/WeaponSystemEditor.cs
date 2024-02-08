@@ -1,4 +1,4 @@
-/*Copyright © Non-Dynamic Studios*/
+/*Copyright ï¿½ Non-Dynamic Studios*/
 /*2023*/
 /*Note: This is an important editor script*/
 
@@ -78,6 +78,7 @@ public class WeaponSystemEditor : Editor
         ws.bulletsPerTap = EditorGUILayout.IntSlider(new GUIContent("Bullet Per Shoot", "Determines the number of bullet the player will shoot in single tap/shoot cycle."), ws.bulletsPerTap, 0, 30);
         ws.muzzelEffectLifeTime = EditorGUILayout.Slider(new GUIContent("Muzzle LifeTime", "Determines the time muzzle flash will saty before going out of existence for good."), ws.muzzelEffectLifeTime, 0f, 10f);
         ws.reloadTime = EditorGUILayout.Slider(new GUIContent("Reloading Time", "Determines the time weapon takes to reload."), ws.reloadTime, 0f, 10f);
+        ws.hardMode = EditorGUILayout.ToggleLeft(new GUIContent("Hard Mode", "If enabled ammo management and reloading will ac realistically."), ws.hardMode);
         EditorGUILayout.Space();
         GUI.color = Color.blue;
         GUILayout.Label("Reload Animation", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleLeft, fontStyle = FontStyle.Bold, fontSize = 13 }, GUILayout.ExpandWidth(true));

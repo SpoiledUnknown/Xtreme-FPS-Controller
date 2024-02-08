@@ -1,4 +1,4 @@
-/*Copyright © Non-Dynamic Studios*/
+/*Copyright ï¿½ Non-Dynamic Studios*/
 /*2023*/
 
 using UnityEngine;
@@ -47,6 +47,7 @@ namespace NDS.UniversalWeaponSystem
         public bool haveProceduralReload;
         public bool reloading;
         public bool aiming;
+        public bool hardMode;
 
         private int bulletsLeft;
         private int bulletsShot;
@@ -240,7 +241,7 @@ namespace NDS.UniversalWeaponSystem
             Invoke(nameof(StopMuzzleEffect), muzzelEffectLifeTime);
 
             Instantiate(Shell, ShellPosition.position, ShellPosition.rotation);
-            bulletSound.PlayOneShot(bulletSoundClip, (soundVolume * 0.01f));
+            bulletSound.PlayOneShot(bulletSoundClip, soundVolume * 0.01f);
             float hRecoil = Random.Range(-this.hRecoil, this.hRecoil);
             switch (aiming)
             {
@@ -293,33 +294,58 @@ namespace NDS.UniversalWeaponSystem
         private void Reload()
         {
             reloading = true;
-            bulletSound.PlayOneShot(bulletReloadClip, (soundVolume * 0.01f));
+            bulletSound.PlayOneShot(bulletReloadClip, soundVolume * 0.01f);
             Invoke(nameof(ReloadFinished), reloadTime);
         }
+
+
         private void ReloadFinished()
         {
-            switch (totalBullets.CompareTo(magazineSize))
+            if (hardMode)
             {
-                case 1:  // totalBullets > magazineSize
-                    bulletsLeft = magazineSize;
-                    totalBullets -= magazineSize;
+                switch (totalBullets.CompareTo(magazineSize))
+                {
+                    case 1:  // totalBullets > magazineSize
+                        bulletsLeft = magazineSize;
+                        totalBullets -= magazineSize;
+                        reloading = false;
+                        break;
+                    case 0:  // totalBullets == magazineSize
+                        bulletsLeft = magazineSize;
+                        totalBullets -= magazineSize;
+                        reloading = false;
+                        break;
+                    case -1: // totalBullets < magazineSize
+                        bulletsLeft = totalBullets;
+                        totalBullets = 0;
+                        reloading = false;
+                        break;
+                    default:
+                        // Handle the case when totalBullets and magazineSize cannot be compared directly
+                        // User can call functions here, like display text saying out of ammo...
+                        break;
+                }
+            }
+            else //if hardMode is false
+            {
+                if ((bulletsLeft + totalBullets) >= magazineSize)
+                {
+                    int bulletsNeededForReload = magazineSize - bulletsLeft;
+                    bulletsLeft += bulletsNeededForReload;
+                    totalBullets -= bulletsNeededForReload;
                     reloading = false;
-                    break;
-                case 0:  // totalBullets == magazineSize
-                    bulletsLeft = magazineSize;
-                    totalBullets -= magazineSize;
+                }
+                else
+                {
+                    int bulletsNeededForReload = magazineSize - bulletsLeft;
+                    bulletsLeft += Mathf.Min(bulletsNeededForReload, totalBullets);
+                    totalBullets -= bulletsNeededForReload;
+                    totalBullets = Mathf.Max(0, totalBullets);
                     reloading = false;
-                    break;
-                case -1: // totalBullets < magazineSize
-                    bulletsLeft = totalBullets;
-                    totalBullets = 0;
-                    reloading = false;
-                    break;
-                default:
-                    // Handle the case when totalBullets and magazineSize cannot be compared directly
-                    break;
+                }
             }
         }
+
         private void HandleWeaponSway()
         {
             if (!havePositionalSway) return;

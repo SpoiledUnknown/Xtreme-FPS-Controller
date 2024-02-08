@@ -71,7 +71,7 @@ public class ExtinguishableFire : MonoBehaviour
         float elapsedTime = 0.0f;
         while (elapsedTime < m_FireStartingTime)
         {
-            float ratio = Mathf.Min(1.0f, (elapsedTime / m_FireStartingTime));
+            float ratio = Mathf.Min(1.0f, elapsedTime / m_FireStartingTime);
 
             fireParticleSystem.transform.localScale = Vector3.one * ratio;
 

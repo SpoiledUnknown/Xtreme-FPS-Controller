@@ -1976,13 +1976,14 @@ MonoBehaviour:
   timeBetweenShooting: 0.1
   Spread: 0.05
   magazineSize: 30
-  totalBullets: 78
+  totalBullets: 17
   bulletsPerTap: 1
   muzzelEffectLifeTime: 1
   reloadTime: 2.3
   haveProceduralReload: 1
   reloading: 0
   aiming: 0
+  hardMode: 0
   canAim: 1
   weaponHolder: {fileID: 2003372854313719904}
   aimingLocalPosition: {x: 0, y: -0.12, z: 0.2336001}

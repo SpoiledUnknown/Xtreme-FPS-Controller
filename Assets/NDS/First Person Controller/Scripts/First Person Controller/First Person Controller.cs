@@ -1,4 +1,4 @@
-/*Copyright © Non-Dynamic Studios*/
+/*Copyright ï¿½ Non-Dynamic Studios*/
 /*2023*/
 
 using System.Collections;
@@ -240,7 +240,7 @@ namespace NDS.FirstPersonController
             if (!playerCanSprint) return;
             if (isSprintHold) isSprinting = inputManager.isSprintingHold;
             else isSprinting = inputManager.isSprintingTap;
-            if (isSprinting)
+            if (isSprinting && characterController.velocity.magnitude > 0)
             {
                 // Drain sprint remaining while sprinting
                 if (!unlimitedSprinting)

@@ -1974,7 +1974,7 @@ MonoBehaviour:
   isAimHold: 0
   timeBetweenEachShots: 0.1
   timeBetweenShooting: 0.1
-  Spread: 0.05
+  Spread: 0.1
   magazineSize: 30
   totalBullets: 17
   bulletsPerTap: 1

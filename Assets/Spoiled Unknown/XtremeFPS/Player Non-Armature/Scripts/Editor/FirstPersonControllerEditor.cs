@@ -1,9 +1,9 @@
-/*Copyright © Non-Dynamic Studios*/
-/*2023*/
+/*Copyright ï¿½ Spoiled Unknown*/
+/*2024*/
 /*Note: This is an important editor script*/
 
 using UnityEditor;
-using NDS.FirstPersonController;
+using XtremeFPS.NonArm.FirstPersonController;
 using Cinemachine;
 using UnityEngine;
 using UnityEngine.UI;

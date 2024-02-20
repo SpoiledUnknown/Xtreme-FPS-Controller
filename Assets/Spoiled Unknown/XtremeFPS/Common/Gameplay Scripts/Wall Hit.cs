@@ -1,8 +1,8 @@
-﻿/*Copyright © Non-Dynamic Studios*/
-/*2023*/
+﻿/*Copyright © Spoiled Unknown*/
+/*2024*/
 
 using UnityEngine;
-using NDS.UniversalWeaponSystem.ShootableObjects;
+using XtremeFPS.Common.WeaponSystem.ShootableObjects;
 
 public class WallHit : ShootableObject
 {

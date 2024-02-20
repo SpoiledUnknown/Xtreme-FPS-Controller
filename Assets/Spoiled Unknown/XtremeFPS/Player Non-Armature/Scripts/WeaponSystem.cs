@@ -1,14 +1,13 @@
-/*Copyright � Non-Dynamic Studios*/
-/*2023*/
+/*Copyright � Spoiled Unknown*/
+/*2024*/
 
 using UnityEngine;
-using Random = UnityEngine.Random;
 using TMPro;
-using NDS.InputSystem.PlayerInputHandler;
-using NDS.UniversalWeaponSystem.Parabolic;
-using NDS.FirstPersonController;
+using XtremeFPS.Common.InputSystem.PlayerInputHandler;
+using XtremeFPS.Common.WeaponSystem.Parabolic;
+using XtremeFPS.NonArm.FirstPersonController;
 
-namespace NDS.UniversalWeaponSystem
+namespace XtremeFPS.NonArm.WeaponSystem
 {
     [RequireComponent(typeof(AudioSource))]
     public class WeaponSystem : MonoBehaviour

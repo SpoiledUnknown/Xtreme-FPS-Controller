@@ -7,7 +7,7 @@
 //     Changes to this file may cause incorrect behavior and will be lost if
 //     the code is regenerated.
 // </auto-generated>
-//     Copyright © Non-Dynamic Studios 2023
+//     Copyright ï¿½ Non-Dynamic Studios 2023
 //------------------------------------------------------------------------------
 
 using System;
@@ -16,7 +16,7 @@ using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
 
-namespace NDS.InputSystem
+namespace XtremeFPS.Common.InputSystem
 {
     public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
     {

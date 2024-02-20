@@ -1,13 +1,13 @@
-/*Copyright � Non-Dynamic Studios*/
-/*2023*/
+/*Copyright � Spoiled Unknown*/
+/*2024*/
 
 using System.Collections;
 using UnityEngine;
-using NDS.InputSystem.PlayerInputHandler;
+using XtremeFPS.Common.InputSystem.PlayerInputHandler;
 using Cinemachine;
 using UnityEngine.UI;
 
-namespace NDS.FirstPersonController
+namespace XtremeFPS.NonArm.FirstPersonController
 {
     [RequireComponent(typeof(CharacterController))]
     [RequireComponent(typeof(FPSInputManager))]

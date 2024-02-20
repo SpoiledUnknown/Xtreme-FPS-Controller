@@ -1,10 +1,10 @@
-/*Copyright © Non-Dynamic Studio*/
+/*Copyright ï¿½ Non-Dynamic Studio*/
 /*2023*/
 
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace NDS.InputSystem.DragControls
+namespace XtremeFPS.Common.InputSystem.DragControls
 {
     public class TouchPad : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {

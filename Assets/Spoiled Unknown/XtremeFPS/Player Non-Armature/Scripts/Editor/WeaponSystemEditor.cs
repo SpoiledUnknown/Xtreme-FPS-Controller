@@ -2,9 +2,9 @@
 /*2023*/
 /*Note: This is an important editor script*/
 
-using NDS.FirstPersonController;
-using NDS.InputSystem.PlayerInputHandler;
-using NDS.UniversalWeaponSystem;
+using XtremeFPS.NonArm.FirstPersonController;
+using XtremeFPS.Common.InputSystem.PlayerInputHandler;
+using XtremeFPS.NonArm.WeaponSystem;
 using TMPro;
 using UnityEditor;
 using UnityEngine;

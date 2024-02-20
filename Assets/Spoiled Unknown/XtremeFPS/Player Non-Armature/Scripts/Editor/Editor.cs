@@ -1,5 +1,5 @@
-/*Copyright � Non-Dynamic Studios*/
-/*2023*/
+/*Copyright � Spoiled Unknown*/
+/*2024*/
 /*Note: This is an important editor script*/
 
 using UnityEditor;

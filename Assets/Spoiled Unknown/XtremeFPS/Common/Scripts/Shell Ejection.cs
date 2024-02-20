@@ -1,9 +1,9 @@
-/*Copyright © Non-Dynamic Studios*/
-/*2023*/
+/*Copyright ï¿½ Spoiled Unknown*/
+/*2024*/
 
 using UnityEngine;
 
-namespace NDS.UniversalWeaponSystem.ShellEjection
+namespace XtremeFPS.Common.WeaponSystem.ShellEjection
 {
     [RequireComponent(typeof(Rigidbody))]
     public class ShellEjection : MonoBehaviour

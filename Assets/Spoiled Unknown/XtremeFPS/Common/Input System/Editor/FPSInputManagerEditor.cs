@@ -1,10 +1,10 @@
-/*Copyright © Non-Dynamic Studios*/
+/*Copyright ï¿½ Non-Dynamic Studios*/
 /*2023*/
 /*Note: This is an important editor script*/
 
 using UnityEditor;
-using NDS.InputSystem.PlayerInputHandler;
-using NDS.InputSystem.DragControls;
+using XtremeFPS.Common.InputSystem.PlayerInputHandler;
+using XtremeFPS.Common.InputSystem.DragControls;
 using UnityEngine;
 
 [CustomEditor(typeof(FPSInputManager)), CanEditMultipleObjects]

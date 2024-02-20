@@ -1,10 +1,10 @@
-﻿/*Copyright © Non-Dynamic Studios*/
-/*2023*/
+﻿/*Copyright © Spoiled Unknown*/
+/*2024*/
 
 using UnityEngine;
-using NDS.UniversalWeaponSystem.ShootableObjects;
+using XtremeFPS.Common.WeaponSystem.ShootableObjects;
 
-namespace NDS.UniversalWeaponSystem.Parabolic
+namespace XtremeFPS.Common.WeaponSystem.Parabolic
 {
     public class ParabolicBullet : MonoBehaviour
     {

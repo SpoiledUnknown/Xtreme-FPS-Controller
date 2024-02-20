@@ -1,12 +1,12 @@
-/*Copyright © Non-Dynamic Studio*/
+/*Copyright ï¿½ Non-Dynamic Studio*/
 /*2023*/
 
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections;
-using NDS.InputSystem.DragControls;
+using XtremeFPS.Common.InputSystem.DragControls;
 
-namespace NDS.InputSystem.PlayerInputHandler
+namespace XtremeFPS.Common.InputSystem.PlayerInputHandler
 {
     public class FPSInputManager : MonoBehaviour
     {

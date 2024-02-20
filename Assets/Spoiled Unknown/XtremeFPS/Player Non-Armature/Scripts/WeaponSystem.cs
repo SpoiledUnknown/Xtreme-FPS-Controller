@@ -4,7 +4,7 @@
 using UnityEngine;
 using TMPro;
 using XtremeFPS.Common.InputSystem.PlayerInputHandler;
-using XtremeFPS.Common.WeaponSystem.Parabolic;
+using XtremeFPS.Common.WeaponSystem.ParabolicBullet;
 using XtremeFPS.NonArm.FirstPersonController;
 
 namespace XtremeFPS.NonArm.WeaponSystem

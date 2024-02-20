@@ -4,7 +4,7 @@
 using UnityEngine;
 using XtremeFPS.Common.WeaponSystem.ShootableObjects;
 
-namespace XtremeFPS.Common.WeaponSystem.Parabolic
+namespace XtremeFPS.Common.WeaponSystem.ParabolicBullet
 {
     public class ParabolicBullet : MonoBehaviour
     {

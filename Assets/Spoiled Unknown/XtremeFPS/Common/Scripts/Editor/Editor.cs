@@ -9,7 +9,7 @@ using UnityEngine;
 public class NDSEditor : EditorWindow
 {
     #region Setup
-    [MenuItem("Window/NDS Hub/Xtreme FPS")]
+    [MenuItem("Window/Spoiled Unknown/Xtreme FPS")]
     public static void ShowWindow()
     {
         // Create a new Editor Window instance and show it
@@ -88,13 +88,13 @@ public class NDSEditor : EditorWindow
             GUI.color = Color.black;
             GUILayout.Label("Xtreme FPS Controller", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Bold, fontSize = 16 });
             GUI.color = Color.green;
-            GUILayout.Label("NDS || By SpoiledUnknown", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Normal, fontSize = 12 });
+            GUILayout.Label("Made By SpoiledUnknown", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Normal, fontSize = 12 });
             GUI.color = Color.red;
-            GUILayout.Label("version 1.5.1", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Italic, fontSize = 12 });
+            GUILayout.Label("version 1.6.0", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Italic, fontSize = 12 });
             GUI.color = Color.black;
             EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
             GUI.color = Color.green;
-            GUILayout.Label("Xtreme FPS Controller Setup", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Bold, fontSize = 16 });
+            GUILayout.Label("XtremeFPS Controller Setup", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Bold, fontSize = 16 });
             GUI.color = Color.black;
             EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
             GUILayout.Space(20); // Add some vertical spacing

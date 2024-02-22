@@ -64,6 +64,9 @@ namespace XtremeFPS.NonArm.FirstPersonController
         public Vector3 jumpVelocity;
         private LayerMask groundLayerMask;
 
+        private bool havePreviouslyJumped;
+
+
         // Crouching
         public bool canCrouch;
         public bool isCrouchHold;
@@ -149,6 +152,9 @@ namespace XtremeFPS.NonArm.FirstPersonController
         private float hRecoil = 0f;
         private float vRecoil = 0f;
 
+
+
+
 #if UNITY_EDITOR
         // Debug Only
         public bool debugMode;
@@ -156,7 +162,7 @@ namespace XtremeFPS.NonArm.FirstPersonController
 #endregion
         #region MonoBehaviour Callbacks
 
-        private void Start()
+        private void OnEnable()
         {
             inputManager = GetComponent<FPSInputManager>();
             groundLayerMask = LayerMaskFromLayer(groundLayerID);
@@ -184,8 +190,6 @@ namespace XtremeFPS.NonArm.FirstPersonController
             {
                 originalArmatureHeight = armature.localScale.y;
             }
-
-
         }
 
         private void Update()
@@ -297,7 +301,7 @@ namespace XtremeFPS.NonArm.FirstPersonController
                 float newHeight = Mathf.Lerp(armature.localScale.y, newArmatureHeight, transitionDelta);
                 armature.transform.localScale = new Vector3(armature.localScale.x, newHeight, armature.localScale.z);
             }
-            else if (!isCrouching)
+            else
             {
                 isTryingToUncrouch = true;
                 AdjustCrouchSettings(initialHeight);
@@ -326,13 +330,13 @@ namespace XtremeFPS.NonArm.FirstPersonController
 
             characterController.height =  newHeight;
 
-                Vector3 halfHeightDifference = new Vector3(0, (initialHeight - newHeight) / 2, 0);
-                Vector3 newCameraHeight = initialCameraPosition - halfHeightDifference;
-                cameraHeadHolder.localPosition = newCameraHeight;
+            Vector3 halfHeightDifference = new Vector3(0, (initialHeight - newHeight) / 2, 0);
+            Vector3 newCameraHeight = initialCameraPosition - halfHeightDifference;
+            cameraHeadHolder.localPosition = newCameraHeight;
 
-                Vector3 halfHeightDifferenceGroundChecker = new Vector3(0, (initialHeight - newHeight) / 2, 0);
-                Vector3 newGroundCheckerHeight = initialGroundCheckerPosition + halfHeightDifferenceGroundChecker;
-                groundCheckTransform.localPosition = newGroundCheckerHeight;
+            Vector3 halfHeightDifferenceGroundChecker = new Vector3(0, (initialHeight - newHeight) / 2, 0);
+            Vector3 newGroundCheckerHeight = initialGroundCheckerPosition + halfHeightDifferenceGroundChecker;
+            groundCheckTransform.localPosition = newGroundCheckerHeight;
         }
         #endregion
         public void AddRecoil(float hRecoil, float vRecoil)
@@ -359,7 +363,6 @@ namespace XtremeFPS.NonArm.FirstPersonController
             if (isZoomingHold) isZoomed = inputManager.isZoomingHold && !isSprinting;
             else isZoomed = inputManager.isZoomingTap && !isSprinting;
 
-            // Lerps camera.fieldOfView to allow for a smooth transistion
             if (isZoomed)
             {
                 playerVirtualCamera.m_Lens.FieldOfView = Mathf.Lerp(playerVirtualCamera.m_Lens.FieldOfView, zoomFOV, zoomStepTime * Time.deltaTime);
@@ -428,7 +431,6 @@ namespace XtremeFPS.NonArm.FirstPersonController
                     break;
 
                 case PlayerMovementState.Default:
-                    // Handle the default state or add additional logic here.
                     break;
             }
         }
@@ -438,25 +440,28 @@ namespace XtremeFPS.NonArm.FirstPersonController
             bool isPreviouslyGrounded = isGrounded; // Store previous grounded state
             isGrounded = Physics.CheckSphere(groundCheckTransform.position, groundCheckRadius, groundLayerMask);
 
-            bool hasJumped = false;
-
             if (isGrounded && !isPreviouslyGrounded)
             {
                 audioSource.PlayOneShot(landClip); // Play land audio only when just touching ground
+                havePreviouslyJumped = false;
             }
 
             if (isGrounded)
             {
-                if (inputManager.haveJumped && !inputManager.isCrouchingTap && !hasJumped && canJump)
+                if (!canJump) return;
+                if (inputManager.haveJumped && !inputManager.isCrouchingTap)
                 {
                     jumpVelocity.y = Mathf.Sqrt(jumpHeight * 2f * gravitationalForce);
-                    audioSource.PlayOneShot(jumpClip);
-                    hasJumped = true;
+                    if (!havePreviouslyJumped)
+                    {
+                        audioSource.PlayOneShot(jumpClip);
+                        havePreviouslyJumped = true;
+                    }
+
                 }
                 else if (!isGrounded && jumpVelocity.y < 0f)
                 {
                     jumpVelocity.y = -3f; // Reset jump velocity on landing
-                    hasJumped = false; // Reset hasJumped flag when grounded
                 }
             }
             else

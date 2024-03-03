@@ -9,6 +9,11 @@ TagManager:
   - gravel
   - water
   - metal
+  - Concrete
+  - Grass
+  - Gravel
+  - Water
+  - Metals
   layers:
   - Default
   - TransparentFX

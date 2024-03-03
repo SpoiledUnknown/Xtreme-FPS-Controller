@@ -162,30 +162,55 @@ namespace XtremeFPS.NonArm.FirstPersonController
 #endregion
         #region MonoBehaviour Callbacks
 
-        private void OnEnable()
+        private void Start()
         {
+            // Get the reference to the FPSInputManager component
             inputManager = GetComponent<FPSInputManager>();
+
+            // Get the layer mask from the groundLayerID
             groundLayerMask = LayerMaskFromLayer(groundLayerID);
+
+            // If canPush is true, get the layer mask from the pushLayersID
             if(canPush)
             {
                 pushLayers = LayerMaskFromLayer(pushLayersID);
             }
+
+            // Get the reference to the AudioSource component
             audioSource = GetComponent<AudioSource>();
+
+            // Set the cursor lock state based on the value of isCursorLocked
             Cursor.lockState = isCursorLocked ? CursorLockMode.Locked : CursorLockMode.None;
+
+            // Set the field of view of the player virtual camera
             playerVirtualCamera.m_Lens.FieldOfView = FOV;
+
+            // Set the audio effect speed to walkSoundSpeed
             AudioEffectSpeed = walkSoundSpeed;
+
+            // Store the initial position of the cameraFollow
             _startPos = cameraFollow.localPosition;
-            StartCoroutine(senseSteps());
+
+            // Start the coroutine for senseSteps
+            StartCoroutine(SenseSteps());
+
+            // If hasStaminaBar is true and unlimitedSprinting is true, deactivate the stamina slider
             if (hasStaminaBar && unlimitedSprinting)
             {
                 staminaSlider.gameObject.SetActive(false);
             }
 
+            // If canCrouch is false, exit the function
             if (!canCrouch) return;
+
+            // Store the initial height of the character controller
             initialHeight = characterController.height;
+
+            // Store the initial position of the camera head holder and ground check transform
             initialCameraPosition = cameraHeadHolder.transform.localPosition;
             initialGroundCheckerPosition = groundCheckTransform.transform.localPosition;
 
+            // If hasArmature is true, store the original armature height
             if (hasArmature)
             {
                 originalArmatureHeight = armature.localScale.y;
@@ -234,16 +259,30 @@ namespace XtremeFPS.NonArm.FirstPersonController
 
         #endregion
         #region Private Methods
+
+        // Get the layer mask from the layer ID
         LayerMask LayerMaskFromLayer(int layer)
         {
             return 1 << layer;
         }
+
         private void HandleSprinting()
         {
 
+            // If player cannot sprint, exit the function
             if (!playerCanSprint) return;
-            if (isSprintHold) isSprinting = inputManager.isSprintingHold;
-            else isSprinting = inputManager.isSprintingTap;
+
+            // Determine if the player is sprinting based on input
+            if (isSprintHold) 
+            {
+                isSprinting = inputManager.isSprintingHold;
+            }
+            else 
+            {
+                isSprinting = inputManager.isSprintingTap;
+            }
+
+            // Check if the player is sprinting and has non-zero velocity
             if (isSprinting && characterController.velocity.magnitude > 0)
             {
                 // Drain sprint remaining while sprinting
@@ -263,8 +302,8 @@ namespace XtremeFPS.NonArm.FirstPersonController
                 sprintRemaining = Mathf.Clamp(sprintRemaining += 1 * Time.deltaTime, 0, sprintDuration);
             }
 
-            // Handles sprint cooldown 
-            // When sprint remaining == 0 stops sprint ability until hitting cooldown
+            // Handle sprint cooldown
+            // When sprint remaining == 0, stop sprint ability until hitting cooldown
             if (isSprintCooldown)
             {
                 sprintCooldown -= 1 * Time.deltaTime;
@@ -278,7 +317,7 @@ namespace XtremeFPS.NonArm.FirstPersonController
                 sprintCooldown = sprintCooldownReset;
             }
 
-            // Handles sprintBar 
+            // Handle sprintBar
             if (hasStaminaBar && !unlimitedSprinting)
             {
                 float sprintRemainingPercent = sprintRemaining / sprintDuration;
@@ -288,52 +327,98 @@ namespace XtremeFPS.NonArm.FirstPersonController
         #region Crouch System
         private void Crouch()
         {
-            if (!canCrouch) return;
-            if (isCrouchHold) isCrouching = inputManager.isCrouchingHold;
-            else isCrouching = inputManager.isCrouchingTap;
-            if (isCrouching)
+            // Check if the character can crouch
+            if (!canCrouch)
             {
-                isTryingToUncrouch = false;
-                AdjustCrouchSettings(crouchedHeight);
-                AudioEffectSpeed = crouchSoundPlayTime;
-                
-                if (!hasArmature) return;
-                float newHeight = Mathf.Lerp(armature.localScale.y, newArmatureHeight, transitionDelta);
-                armature.transform.localScale = new Vector3(armature.localScale.x, newHeight, armature.localScale.z);
+                // If not, return immediately
+                return;
+            }
+
+            // Determine the crouching state based on the input
+            if (isCrouchHold)
+            {
+                // If crouch hold is enabled, set crouching state based on isCrouchingHold
+                isCrouching = inputManager.isCrouchingHold;
             }
             else
             {
+                // Otherwise, set crouching state based on isCrouchingTap
+                isCrouching = inputManager.isCrouchingTap;
+            }
+
+            // Check if the character is crouching
+            if (isCrouching)
+            {
+                // Set trying to uncrouch to false
+                isTryingToUncrouch = false;
+
+                // Adjust crouch settings to crouched height
+                AdjustCrouchSettings(crouchedHeight);
+
+                // Set the audio effect speed for crouching
+                AudioEffectSpeed = crouchSoundPlayTime;
+
+                // Check if the character has an armature
+                if (hasArmature)
+                {
+                    // If yes, interpolate the armature's height to the new crouched height
+                    float newHeight = Mathf.Lerp(armature.localScale.y, newArmatureHeight, transitionDelta);
+                    armature.transform.localScale = new Vector3(armature.localScale.x, newHeight, armature.localScale.z);
+                }
+            }
+            else
+            {
+                // Set trying to uncrouch to true
                 isTryingToUncrouch = true;
+
+                // Adjust crouch settings to initial height
                 AdjustCrouchSettings(initialHeight);
+
+                // Check if the character is not sprinting
                 if (!isSprinting)
                 {
+                    // If not sprinting, set the audio effect speed for walking
                     AudioEffectSpeed = walkSoundSpeed;
                 }
-                if(!hasArmature) return;
-                float newHeight = Mathf.Lerp(armature.localScale.y, originalArmatureHeight, transitionDelta);
-                armature.transform.localScale = new Vector3(armature.localScale.x, newHeight, armature.localScale.z);
+
+                // Check if the character has an armature
+                if (hasArmature)
+                {
+                    // If yes, interpolate the armature's height to the original armature height
+                    float newHeight = Mathf.Lerp(armature.localScale.y, originalArmatureHeight, transitionDelta);
+                    armature.transform.localScale = new Vector3(armature.localScale.x, newHeight, armature.localScale.z);
+                }
             }
         }
 
         private void AdjustCrouchSettings(float targetHeight)
         {
-            if(isTryingToUncrouch)
+            if (isTryingToUncrouch)
             {
+                // Calculate the origin of the raycast for ceiling detection
                 Vector3 castOrigin = transform.position + new Vector3(0f, newHeight / 2, 0f);
+
+                // Perform a raycast to detect the distance to the ceiling
                 if (Physics.Raycast(castOrigin, Vector3.up, out RaycastHit hit, 0.2f))
                 {
+                    // Calculate the distance to the ceiling and adjust the target height
                     float distanceToCeiling = hit.point.y - castOrigin.y;
                     targetHeight = Mathf.Max(newHeight + distanceToCeiling - 0.1f, crouchedHeight);
                 }
             }
+
+            // Interpolate the character's height towards the target height
             newHeight = Mathf.Lerp(characterController.height, targetHeight, transitionDelta) + (inputManager.isCrouchingTap ? -0.0000001f : 0.0000001f);
 
-            characterController.height =  newHeight;
+            // Update the character controller's height
+            characterController.height = newHeight;
 
+            // Adjust the camera position based on the new height
             Vector3 halfHeightDifference = new Vector3(0, (initialHeight - newHeight) / 2, 0);
             Vector3 newCameraHeight = initialCameraPosition - halfHeightDifference;
             cameraHeadHolder.localPosition = newCameraHeight;
 
+            // Adjust the ground checker position based on the new height
             Vector3 halfHeightDifferenceGroundChecker = new Vector3(0, (initialHeight - newHeight) / 2, 0);
             Vector3 newGroundCheckerHeight = initialGroundCheckerPosition + halfHeightDifferenceGroundChecker;
             groundCheckTransform.localPosition = newGroundCheckerHeight;
@@ -346,6 +431,7 @@ namespace XtremeFPS.NonArm.FirstPersonController
             this.vRecoil = vRecoil;
         }
 
+        //Basic Camera Motion
         private void HandleCameraLook()
         {
             float mouseDirectionX = inputManager.mouseDirection.x * mouseSensitivity * Time.deltaTime + hRecoil;
@@ -374,23 +460,36 @@ namespace XtremeFPS.NonArm.FirstPersonController
         }
         private void AdjustFOVSettings(float targetFOV) 
         {
+            // If already zoomed, exit the function
             if (isZoomed) return;
+
+            // If not moving, set the target field of view to FOV
             if (!moving)
             {
                 targetFOV = FOV;
             }
+
+            // Get the current field of view of the player virtual camera
             float currentFOV = playerVirtualCamera.m_Lens.FieldOfView;
 
+            // Calculate the new field of view using linear interpolation and adjust for sprinting
             float newFOV = Mathf.Lerp(currentFOV, targetFOV, transitionDelta) + (isSprinting ? -0.0000001f : 0.0000001f);
 
+            // Set the field of view of the player virtual camera to the new calculated value
             playerVirtualCamera.m_Lens.FieldOfView = newFOV;
-
         }
         private void HandleMovements()
         {
+            // If player cannot move, exit the function
             if (!playerCanMove) return;
+
+            // Initialize the movement state to Default
             PlayerMovementState movementState = PlayerMovementState.Default;
+
+            // Check if the character height is approximately equal to the initial height
             bool approxHeight = Mathf.Approximately(characterController.height, initialHeight);
+
+            // Determine the movement state based on player input and character state
             if (isSprinting && !inputManager.isCrouchingTap && playerCanSprint && approxHeight)
             {
                 movementState = PlayerMovementState.Sprinting;
@@ -403,10 +502,15 @@ namespace XtremeFPS.NonArm.FirstPersonController
             {
                 movementState = PlayerMovementState.Walking;
             }
-            SwitchMoveState(movementState);
-            moveDirection = inputManager.moveDirection.x * targetSpeed * Time.deltaTime * transform.right
-                + inputManager.moveDirection.y * targetSpeed * Time.deltaTime * transform.forward;
 
+            // Update the player's movement state
+            SwitchMoveState(movementState);
+
+            // Calculate the move direction based on input and target speed
+            moveDirection = inputManager.moveDirection.x * targetSpeed * Time.deltaTime * transform.right
+                            + inputManager.moveDirection.y * targetSpeed * Time.deltaTime * transform.forward;
+
+            // Move the character controller based on the calculated move direction
             characterController.Move(moveDirection);
         }
 
@@ -497,6 +601,7 @@ namespace XtremeFPS.NonArm.FirstPersonController
         }
 
         #region Head Bobbing
+        // Calculate the footstep motion based on head bobbing parameters
         private Vector3 FootStepMotion()
         {
             Vector3 pos = Vector3.zero;
@@ -504,125 +609,122 @@ namespace XtremeFPS.NonArm.FirstPersonController
             pos.x += Mathf.Cos(Time.time * headBobFrequency / 2) * headBobAmplitude * 2;
             return pos;
         }
+
+        // Check motion to determine if the character is moving
         private void CheckMotion()
         {
             float speed = characterController.velocity.magnitude;
-            if (speed < _toggleSpeed) return;
-            if (!isGrounded) return;
+            if (speed < _toggleSpeed || !isGrounded)
+            {
+                // If the character is not moving or not grounded, return without further action
+                return;
+            }
 
+            // If the character is moving and grounded, play the calculated motion
             PlayMotion(FootStepMotion());
         }
+
+        // Apply the calculated motion to the camera follow position
         private void PlayMotion(Vector3 motion)
         {
             cameraFollow.localPosition += motion;
         }
 
+        // Calculate the focus target position based on the character's position and camera follow position
         private Vector3 FocusTarget()
         {
             Vector3 pos = new Vector3(transform.position.x, transform.position.y + cameraFollow.localPosition.y, transform.position.z);
             pos += cameraFollow.forward * 15.0f;
             return pos;
         }
+
+        // Reset the position of the camera follow to the starting position with interpolation
         private void ResetPosition()
         {
-            if (cameraFollow.localPosition == _startPos) return;
-            cameraFollow.localPosition = Vector3.Lerp(cameraFollow.localPosition, _startPos, 1 * Time.deltaTime);
+            if (cameraFollow.localPosition != _startPos)
+            {
+                // If the camera follow position is not at the starting position, interpolate towards the starting position
+                cameraFollow.localPosition = Vector3.Lerp(cameraFollow.localPosition, _startPos, 1f * Time.deltaTime);
+            }
         }
         #endregion
 
         #region Sound Management
+        // Method to sense the floor material and player movement
         private void SoundSense()
         {
             Vector3 castOrigin = transform.position;
-            if (Physics.Raycast(castOrigin, Vector3.down, out RaycastHit hit, 5f))
+            RaycastHit hit;
+            if (Physics.Raycast(castOrigin, Vector3.down, out hit, 5f))
             {
-                if (hit.collider.CompareTag(grassTag))
+                switch (hit.collider.tag)
                 {
-                    floortag = grassTag;
+                    case "grass":
+                        floortag = "grass";
+                        break;
+                    case "metal":
+                        floortag = "metal";
+                        break;
+                    case "gravel":
+                        floortag = "gravel";
+                        break;
+                    case "water":
+                        floortag = "water";
+                        break;
+                    case "concrete":
+                        floortag = "concrete";
+                        break;
+                    default:
+                        floortag = "";
+                        break;
                 }
-                else if (hit.collider.CompareTag(metalTag))
-                {
-                    floortag = metalTag;
-                }
-                else if (hit.collider.CompareTag(gravelTag))
-                {
-                    floortag = gravelTag;
-                }
-                else if (hit.collider.gameObject.CompareTag(waterTag))
-                {
-                    floortag = waterTag;
-                }
-                else if (hit.collider.CompareTag(concreteTag))
-                {
-                    floortag = concreteTag;
-                }
-
             }
-            //Sensing movement for players
+
+            // Sensing movement for players
             var velocity = characterController.velocity;
             var localVel = transform.InverseTransformDirection(velocity);
 
-            if (localVel.z > footstepSensitivity)
-            {
-                moving = true;
-            }
-            else if (localVel.z < (footstepSensitivity * -1))
-            {
-                moving = true;
-            }
-            else if (localVel.x > footstepSensitivity)
-            {
-                moving = true;
-            }
-            else if (localVel.x < (footstepSensitivity * -1))
-            {
-                moving = true;
-            }
-            else
-            {
-                moving = false;
-            }
+            moving = (localVel.z > footstepSensitivity || localVel.z < -footstepSensitivity || localVel.x > footstepSensitivity || localVel.x < -footstepSensitivity);
         }
 
-        private IEnumerator senseSteps()
+        // Coroutine to sense steps and play sound
+        private IEnumerator SenseSteps()
         {
             while (true)
             {
                 if (isGrounded && moving)
                 {
-                    if (floortag == grassTag)
+                    switch (floortag)
                     {
-                        audioSource.clip = soundGrass[Random.Range(0, soundGrass.Length)];
-                    }
-                    else if (floortag == gravelTag)
-                    {
-                        audioSource.clip = soundGravel[Random.Range(0, soundGravel.Length)];
-                    }
-                    else if (floortag == waterTag)
-                    {
-                        audioSource.clip = soundWater[Random.Range(0, soundWater.Length)];
-                    }
-                    else if (floortag == metalTag)
-                    {
-                        audioSource.clip = soundMetal[Random.Range(0, soundMetal.Length)];
-                    }
-                    else if (floortag == concreteTag)
-                    {
-                        audioSource.clip = soundConcrete[Random.Range(0, soundConcrete.Length)];
-                    }
-                    else
-                    {
-                        yield return 0;
+                        case "grass":
+                            audioSource.clip = soundGrass[Random.Range(0, soundGrass.Length)];
+                            break;
+                        case "gravel":
+                            audioSource.clip = soundGravel[Random.Range(0, soundGravel.Length)];
+                            break;
+                        case "water":
+                            audioSource.clip = soundWater[Random.Range(0, soundWater.Length)];
+                            break;
+                        case "metal":
+                            audioSource.clip = soundMetal[Random.Range(0, soundMetal.Length)];
+                            break;
+                        case "concrete":
+                            audioSource.clip = soundConcrete[Random.Range(0, soundConcrete.Length)];
+                            break;
+                        default:
+                            yield return null;
+                            break;
                     }
                     if (audioSource.clip != null)
+                    {
                         audioSource.PlayOneShot(audioSource.clip);
-                    yield return new WaitForSeconds(AudioEffectSpeed);
+                        yield return new WaitForSeconds(AudioEffectSpeed);
+                    }
                 }
                 else
                 {
-                    yield return 0;
+                    yield return null;
                 }
-
             }
         }
         #endregion

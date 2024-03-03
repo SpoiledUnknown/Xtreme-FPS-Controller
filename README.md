@@ -33,7 +33,7 @@ An advance yet easy to use and modify First Person Prespective based character c
  2. Open the project where you want to use this asset.
  3. Double click the "Unity Package" or Drag and Drop the "Unity Package" to the open unity editor.
  4. Install all the packages
- 5. Go to `window -> NDS Hub -> XtremeFPS`.
+ 5. Go to `window -> Spoiled Unknown -> XtremeFPS`.
  6. Click on `System Installs`.
  7. Install both `Cinemachine` And `Input System`.
     - You can also use package manager to install these packages.
@@ -48,11 +48,11 @@ An advance yet easy to use and modify First Person Prespective based character c
 ### Method 2:
 1. Download the source code from [here](https://github.com/SpoiledUnknown/Xtreme-FPS-Controller/releases/tag/version-1.5.1).
 2. Go inside the source code, then go inside `Asset`.
-3. Copy `NDS` folder.
+3. Copy `Spoiled Unknown` folder.
 4. Paste in your current project.
 5. Open Unity Editor.
 6. Wait for the Editor to import and compile the new codes.
-7. Go to `window -> NDS Hub -> XtremeFPS`.
+7. Go to `window -> Spoiled Unknown -> XtremeFPS`.
 8. Click on `System Installs`.
 9. Install both `Cinemachine` And `Input System`.
     - You can also use package manager to install these packages.
@@ -66,10 +66,10 @@ An advance yet easy to use and modify First Person Prespective based character c
 
 ## How to Use:
 ### Method 1 (Prefabs):
-1. Go to `window -> NDS Hub -> XtremeFPS`.
+1. Go to `window -> Spoiled Unknown -> XtremeFPS`.
 2. Click on `Layer And Tag Setup`.
 3. Click on `Create Layers` and `Create Tags`.
-4. Go to `NDS -> First Person Controller -> Prefabs -> Player`.
+4. Go to `Spoiled Unknown -> First Person Controller -> Prefabs -> Player`.
 5. Click on desired folder (Depends on whether you need weapon system or not).
 6. Drag and Drop the prefab.
 7. Change the values as you want.

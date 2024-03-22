@@ -80,7 +80,6 @@ namespace XtremeFPS.NonArm.WeaponSystem
 
         //Weapon Recoil 
         public bool haveWeaponRecoil;
-        public Transform gunRotationHolder;
         public Transform gunPositionHolder;
         public float gunRecoilPositionSpeed;
         public float gunPositionReturnSpeed;
@@ -107,11 +106,8 @@ namespace XtremeFPS.NonArm.WeaponSystem
 
         //Weapon Rotational Sway
         public bool haveRotationalSway;
-        public Transform rotationSwayTransform;
         public float rotaionSwayIntensity;
         public float rotationSwaySmoothness;
-
-        private Quaternion rotationSwayOriginalRotation;
 
         //Jump Sway
         public bool haveJumpSway;
@@ -161,14 +157,13 @@ namespace XtremeFPS.NonArm.WeaponSystem
         {
             fpsController.haveCameraRecoil = haveSensyRecoil;
             bulletsLeft = magazineSize;
-            readyToShoot = true;
             bulletSound = GetComponent<AudioSource>();
             originRotation = transform.localRotation;
             originPosition = transform.localPosition;
-            rotationSwayOriginalRotation = rotationSwayTransform.localRotation;
             lastPosition = transform.position;
             originalReloadRotation = gunPositionHolder.localRotation;
             normalLocalPosition = weaponHolder.transform.localPosition;
+            readyToShoot = true;
         }
         private void Update()
         {
@@ -384,16 +379,16 @@ namespace XtremeFPS.NonArm.WeaponSystem
 
             gunPositionHolder.localPosition = Vector3.Slerp(gunPositionHolder.localPosition, positionRecoil, gunRecoilPositionSpeed * Time.deltaTime);
             rot = Vector3.Slerp(rot, rotationRecoil, gunRecoilRotationSpeed* Time.deltaTime);
-            gunRotationHolder.localRotation = Quaternion.Euler(rot);
+            gunPositionHolder.localRotation = Quaternion.Euler(rot);
         }
         private void WeaponRotationSway()
         {
             if(!haveRotationalSway) return;
 
             Quaternion newAdjustedRotationX = Quaternion.AngleAxis(rotaionSwayIntensity * mouseX * -1f, Vector3.up);
-            Quaternion targetRotation = rotationSwayOriginalRotation * newAdjustedRotationX;
+            Quaternion targetRotation = originRotation * newAdjustedRotationX;
 
-            rotationSwayTransform.localRotation = Quaternion.Lerp(rotationSwayTransform.localRotation, targetRotation, rotationSwaySmoothness * Time.deltaTime);
+            transform.localRotation = Quaternion.Lerp(transform.localRotation, targetRotation, rotationSwaySmoothness * Time.deltaTime);
 
         }
         private void WeaponMoveBobbing()

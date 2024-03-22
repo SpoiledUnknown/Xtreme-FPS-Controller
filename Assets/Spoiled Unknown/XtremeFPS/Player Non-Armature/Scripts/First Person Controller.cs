@@ -84,7 +84,6 @@ namespace XtremeFPS.NonArm.FirstPersonController
         // Camera
         public bool isCursorLocked;
         public Transform cameraFollow;
-        public Transform cameraHeadHolder;
         public CinemachineVirtualCamera playerVirtualCamera;
         public float mouseSensitivity;
         public float maximumClamp;
@@ -112,6 +111,7 @@ namespace XtremeFPS.NonArm.FirstPersonController
         private Vector3 _startPos;
 
         //Sound System
+        public bool canPlaySound;
         public string grassTag;
         public AudioClip[] soundGrass;
         public string waterTag;
@@ -122,6 +122,8 @@ namespace XtremeFPS.NonArm.FirstPersonController
         public AudioClip[] soundConcrete;
         public string gravelTag;
         public AudioClip[] soundGravel;
+        public string woodTag;
+        public AudioClip[] soundWood;
         public AudioClip landClip;
         public AudioClip jumpClip;
         public float footstepSensitivity;
@@ -192,7 +194,10 @@ namespace XtremeFPS.NonArm.FirstPersonController
             _startPos = cameraFollow.localPosition;
 
             // Start the coroutine for senseSteps
-            StartCoroutine(SenseSteps());
+            if (canPlaySound)
+            {
+                StartCoroutine(SenseSteps());
+            }
 
             // If hasStaminaBar is true and unlimitedSprinting is true, deactivate the stamina slider
             if (hasStaminaBar && unlimitedSprinting)
@@ -207,7 +212,7 @@ namespace XtremeFPS.NonArm.FirstPersonController
             initialHeight = characterController.height;
 
             // Store the initial position of the camera head holder and ground check transform
-            initialCameraPosition = cameraHeadHolder.transform.localPosition;
+            initialCameraPosition = cameraFollow.transform.localPosition;
             initialGroundCheckerPosition = groundCheckTransform.transform.localPosition;
 
             // If hasArmature is true, store the original armature height
@@ -416,7 +421,7 @@ namespace XtremeFPS.NonArm.FirstPersonController
             // Adjust the camera position based on the new height
             Vector3 halfHeightDifference = new Vector3(0, (initialHeight - newHeight) / 2, 0);
             Vector3 newCameraHeight = initialCameraPosition - halfHeightDifference;
-            cameraHeadHolder.localPosition = newCameraHeight;
+            cameraFollow.localPosition = newCameraHeight;
 
             // Adjust the ground checker position based on the new height
             Vector3 halfHeightDifferenceGroundChecker = new Vector3(0, (initialHeight - newHeight) / 2, 0);
@@ -653,6 +658,7 @@ namespace XtremeFPS.NonArm.FirstPersonController
         // Method to sense the floor material and player movement
         private void SoundSense()
         {
+            if (!canPlaySound) return;
             Vector3 castOrigin = transform.position;
             RaycastHit hit;
             if (Physics.Raycast(castOrigin, Vector3.down, out hit, 5f))
@@ -674,6 +680,9 @@ namespace XtremeFPS.NonArm.FirstPersonController
                     case "concrete":
                         floortag = "concrete";
                         break;
+                    case "wood":
+                        floortag = "wood";
+                        break;
                     default:
                         floortag = "";
                         break;
@@ -690,6 +699,7 @@ namespace XtremeFPS.NonArm.FirstPersonController
         // Coroutine to sense steps and play sound
         private IEnumerator SenseSteps()
         {
+            if (!canPlaySound) yield return null;
             while (true)
             {
                 if (isGrounded && moving)
@@ -710,6 +720,9 @@ namespace XtremeFPS.NonArm.FirstPersonController
                             break;
                         case "concrete":
                             audioSource.clip = soundConcrete[Random.Range(0, soundConcrete.Length)];
+                            break;
+                        case "wood":
+                            audioSource.clip = soundWood[Random.Range(0, soundWood.Length)];
                             break;
                         default:
                             yield return null;

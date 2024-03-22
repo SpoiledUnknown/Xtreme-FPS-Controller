@@ -211,22 +211,22 @@
                 },
                 {
                     "name": "",
-                    "id": "7c6c4cfd-456c-4e4c-b43f-46f99bbeea52",
-                    "path": "<Mouse>/delta",
+                    "id": "50ed5279-13d6-4480-9340-fd559dc5b18e",
+                    "path": "<Gamepad>/rightStick",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Keyboard And Mouse",
+                    "groups": "Controller",
                     "action": "Look",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "50ed5279-13d6-4480-9340-fd559dc5b18e",
-                    "path": "<Gamepad>/rightStick",
+                    "id": "bf3847bb-990b-4d69-b7df-78a6cf282957",
+                    "path": "<Mouse>/delta",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Controller",
+                    "groups": "Keyboard And Mouse",
                     "action": "Look",
                     "isComposite": false,
                     "isPartOfComposite": false

@@ -4,16 +4,13 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections;
-using XtremeFPS.Common.InputSystem.DragControls;
+using UnityEngine.EventSystems;
 
 namespace XtremeFPS.Common.InputSystem.PlayerInputHandler
 {
     public class FPSInputManager : MonoBehaviour
     {
         #region Variables
-        //Mobile Controls
-        public TouchPad touchPad;
-
 
         [HideInInspector] private PlayerInputAction playerInputAction;
         //sprinting
@@ -38,6 +35,7 @@ namespace XtremeFPS.Common.InputSystem.PlayerInputHandler
         [HideInInspector] public bool isAimingHold;
         //Peeking
         [HideInInspector] public Vector2 peekDirection;
+
         #endregion
         #region Initialization
         private void Awake()
@@ -95,17 +93,42 @@ namespace XtremeFPS.Common.InputSystem.PlayerInputHandler
 
             #endregion
         }
-
+#if UNITY_ANDROID || UNITY_IOS
         private void Update()
         {
-            #if UNITY_ANDROID
-                if (touchPad != null)
+            if (Touchscreen.current == null || Touchscreen.current.touches.Count == 0) return;
+
+            if (EventSystem.current.IsPointerOverGameObject(Touchscreen.current.touches[0].touchId.ReadValue()))
+            {
+                if (Touchscreen.current.touches.Count > 1 && Touchscreen.current.touches[1].isInProgress)
                 {
-                    mouseDirection = touchPad.TouchDist;
+                    if (EventSystem.current.IsPointerOverGameObject(Touchscreen.current.touches[1].touchId.ReadValue())) return;
+
+                    mouseDirection = Touchscreen.current.touches[1].delta.ReadValue();
                 }
-            #endif
+                else
+                {
+                    mouseDirection = Vector2.zero;
+                }
+            }
+            else
+            {
+                if (Touchscreen.current.touches.Count > 0 && Touchscreen.current.touches[0].isInProgress)
+                {
+                    if (EventSystem.current.IsPointerOverGameObject(Touchscreen.current.touches[0].touchId.ReadValue())) return;
+
+                    mouseDirection = Touchscreen.current.touches[0].delta.ReadValue();
+                }
+                else
+                {
+                    mouseDirection = Vector2.zero;
+                }
+            }
         }
-        #endregion
+#endif
+#endregion
+
+
         #region Input Handling
         private void MouseInput(InputAction.CallbackContext context)
         {
